@@ -1019,8 +1019,9 @@ body.tema-transicao-ativa .menu-mobile__acao[data-mobile-action="theme"] svg {
     align-items: center;
     justify-content: center;
     padding: 0 18px;
-    border: 1px solid rgba(255, 247, 238, 0.36);
-    color: #fff7ee;
+    border: 1px solid #f2d3ad;
+    background: #f2d3ad;
+    color: #2b160c;
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.14em;
@@ -1031,18 +1032,20 @@ body.tema-transicao-ativa .menu-mobile__acao[data-mobile-action="theme"] svg {
 
 .home-hero__acao:hover {
     transform: translateY(-2px);
-    border-color: #f2d3ad;
-    background: rgba(255, 247, 238, 0.1);
+    border-color: #fff7ee;
+    background: #fff7ee;
+    color: #2b160c;
 }
 
 .home-hero__acao--primaria {
-    background: #f2d3ad;
-    border-color: #f2d3ad;
+    background: #fff7ee;
+    border-color: #fff7ee;
     color: #2b160c;
 }
 
 .home-hero__acao--primaria:hover {
-    background: #fff7ee;
+    background: #f2d3ad;
+    border-color: #f2d3ad;
     color: #2b160c;
 }
 

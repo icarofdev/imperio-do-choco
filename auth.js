@@ -1,12 +1,7 @@
 const STORAGE_KEY_AUTH = "imperio_auth_session";
 const STORAGE_KEY_USERS = "imperio_auth_users";
 
-const AUTH_DEFAULT_USER = {
-    nome: "Administrador",
-    email: "admin@imperiodochocolate.com",
-    senha: "admin123",
-    papel: "admin",
-};
+const AUTH_DEFAULT_USER = null;
 
 function normalizarEmail(email) {
     return String(email || "").trim().toLowerCase();
@@ -39,15 +34,11 @@ function obterUsuariosLocais() {
         console.warn("Nao foi possivel ler os usuarios locais.", erro);
     }
 
-    const possuiAdmin = usuarios.some((usuario) => normalizarEmail(usuario.email) === AUTH_DEFAULT_USER.email);
-    return possuiAdmin ? usuarios : [AUTH_DEFAULT_USER, ...usuarios];
+    return usuarios;
 }
 
 function salvarUsuariosLocais(usuarios) {
-    const usuariosSemAdminPadrao = usuarios.filter((usuario) =>
-        normalizarEmail(usuario.email) !== AUTH_DEFAULT_USER.email
-    );
-    localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(usuariosSemAdminPadrao));
+    localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(usuarios));
 }
 
 function buscarUsuarioPorEmail(email) {

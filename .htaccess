@@ -1,0 +1,23 @@
+DirectoryIndex index.php index.html
+Options -Indexes
+
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "^(gerar-senha|teste_banco)\.php$">
+    Require all denied
+</FilesMatch>
+
+<Files "Imperio do Chocolate.html">
+    Require all denied
+</Files>
+
+<FilesMatch "\.(log|sql|md|txt)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

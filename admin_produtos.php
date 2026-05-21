@@ -27,6 +27,35 @@ function normalizarListaImagens(array $imagens): array
     ))));
 }
 
+function gerarSlugProduto(string $texto): string
+{
+    $texto = trim($texto);
+    $normalizado = iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", $texto);
+    $normalizado = is_string($normalizado) ? $normalizado : $texto;
+    $normalizado = strtolower($normalizado);
+    $normalizado = preg_replace('/[^a-z0-9]+/', "-", $normalizado) ?? "";
+
+    return trim($normalizado, "-");
+}
+
+function gerarReferenciaProduto(): string
+{
+    return (string) random_int(1000000000, 9999999999);
+}
+
+function normalizarReferenciaProduto(?string $referencia): ?string
+{
+    $referencia = trim((string) $referencia);
+
+    if ($referencia === "") {
+        return null;
+    }
+
+    $referencia = preg_replace('/[^A-Za-z0-9-]+/', "", $referencia) ?? "";
+
+    return $referencia !== "" ? strtoupper($referencia) : null;
+}
+
 function gerarSlugUnicoProduto(PDO $pdo, string $nome, ?int $ignorarId = null): string
 {
     $slugBase = gerarSlugProduto($nome) ?: "produto";
@@ -127,15 +156,30 @@ function formatarProdutoAdmin(array $produto): array
 
     if (is_string($imagensBrutas) && $imagensBrutas !== "") {
         $imagensDecodificadas = json_decode($imagensBrutas, true);
+        $galeria = is_array($imagensDecodificadas) ? normalizarListaImagens($imagensDecodificadas) : [];
+    } elseif (is_array($imagensBrutas)) {
+        $galeria = normalizarListaImagens($imagensBrutas);
+    }
+
+    $imagemPrincipal = (string) ($produto["img"] ?? "");
+
+    if ($imagemPrincipal !== "" && !in_array($imagemPrincipal, $galeria, true)) {
+        array_unshift($galeria, $imagemPrincipal);
+    }
+
+    $pesoOriginal = (string) ($produto["peso"] ?? "");
+    $pesoGramas = isset($produto["peso_gramas"]) && $produto["peso_gramas"] !== null
+        ? max(0, (int) $produto["peso_gramas"])
+        : extrairPesoGramas($pesoOriginal);
 
     return [
         "id" => (int) ($produto["id"] ?? 0),
         "slug" => (string) ($produto["slug"] ?? ""),
-        "img" => (string) ($produto["img"] ?? ""),
+        "img" => $imagemPrincipal,
         "nome" => (string) ($produto["nome"] ?? ""),
         "preco" => (float) ($produto["preco"] ?? 0),
         "categoria" => (string) ($produto["categoria"] ?? $produto["tipo"] ?? "Chocolate"),
-        "peso" => formatarPesoProduto((string) ($produto["peso"] ?? ""), $pesoGramas),
+        "peso" => formatarPesoProduto($pesoOriginal, $pesoGramas),
         "peso_gramas" => $pesoGramas,
         "ref" => (string) ($produto["ref"] ?? ""),
         "destaque" => (string) ($produto["destaque"] ?? ""),
@@ -144,6 +188,45 @@ function formatarProdutoAdmin(array $produto): array
         "estoque_quantidade" => (int) ($produto["estoque_quantidade"] ?? 0),
         "tipo" => (string) ($produto["tipo"] ?? ""),
     ];
+}
+
+function extrairPesoGramas(string $peso): ?int
+{
+    $peso = strtolower(trim(str_replace(",", ".", $peso)));
+
+    if ($peso === "") {
+        return null;
+    }
+
+    if (preg_match('/(\d+(?:\.\d+)?)\s*(kg|quilo|kilo|g|gr|grama|gramas)\b/u', $peso, $matches) !== 1) {
+        return null;
+    }
+
+    $valor = (float) $matches[1];
+    $unidade = $matches[2];
+
+    if (in_array($unidade, ["kg", "quilo", "kilo"], true)) {
+        $valor *= 1000;
+    }
+
+    return max(0, (int) round($valor));
+}
+
+function formatarPesoProduto(string $peso, ?int $pesoGramas): string
+{
+    $peso = trim($peso);
+
+    if ($peso !== "") {
+        return $peso;
+    }
+
+    if ($pesoGramas === null || $pesoGramas <= 0) {
+        return "";
+    }
+
+    return $pesoGramas >= 1000 && $pesoGramas % 1000 === 0
+        ? ((int) ($pesoGramas / 1000)) . " kg"
+        : $pesoGramas . "g";
 }
 
 function lerCorpoJsonAdmin(): array
@@ -261,6 +344,29 @@ function responderErroDePersistencia(PDOException $exception, string $mensagemPa
     responderJsonAdmin(["erro" => $mensagemPadrao], 500);
 }
 
+function excecaoEntradaDuplicada(PDOException $exception): bool
+{
+    $info = $exception->errorInfo;
+    return (string) ($info[0] ?? "") === "23000" && (int) ($info[1] ?? 0) === 1062;
+}
+
+function obterChaveDuplicada(PDOException $exception): string
+{
+    $mensagem = $exception->getMessage();
+
+    if (preg_match("/for key '([^']+)'/i", $mensagem, $matches) === 1) {
+        return (string) $matches[1];
+    }
+
+    return "";
+}
+
+if (!usuarioEhAdmin()) {
+    responderJsonAdmin(["erro" => "Acesso administrativo necessario."], 403);
+}
+
+if (!bancoDeDadosDisponivel($pdo) || !($pdo instanceof PDO) || !schemaProdutosDisponivel($pdo)) {
+    responderJsonAdmin(["erro" => "Banco de dados indisponivel ou schema de produtos ausente."], 503);
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
@@ -371,6 +477,13 @@ if ($_SERVER["REQUEST_METHOD"] === "PUT") {
             responderJsonAdmin(["erro" => "Produto nao encontrado."], 404);
         }
 
+        $slug = gerarSlugUnicoProduto($pdo, $produto["nome"], $produto["id"]);
+        $referencia = resolverReferenciaProduto(
+            $pdo,
+            $produto["ref"],
+            (string) ($produtoAtual["ref"] ?? ""),
+            $produto["id"]
+        );
         $estoqueAnterior = (int) ($produtoAtual["estoque_quantidade"] ?? 0);
 
         $stmt = $pdo->prepare(
