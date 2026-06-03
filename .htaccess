@@ -1,17 +1,28 @@
-DirectoryIndex index.php index.html
+DirectoryIndex index.php public/index.php
 Options -Indexes
+
+RewriteEngine On
+
+RewriteRule ^(?:app|database|logs)(?:/|$) - [F,L]
+RewriteRule ^\.env - [F,L]
+RewriteRule ^(?:TODO\.md|gerar-senha\.php|teste-banco\.php|teste_banco\.php)$ - [F,L]
+
+RewriteRule ^admin_produtos\.php$ public/admin-produtos.php [R=302,L]
+RewriteRule ^buscar_chocolates\.php$ public/buscar-chocolates.php [R=302,L]
+RewriteRule ^finalizar_pedido\.php$ public/finalizar-pedido.php [R=302,L]
+RewriteRule ^sessao_usuario\.php$ public/sessao-usuario.php [R=302,L]
+RewriteRule ^esqueci_senha\.php$ public/esqueci-senha.php [R=302,L]
+RewriteRule ^redefinir_senha\.php$ public/redefinir-senha.php [R=302,L]
+
+RewriteRule ^(index|admin|cadastro|conta|login)\.php$ public/$1.php [R=302,L]
+RewriteRule ^(index|admin|cadastro|conta|login)\.html$ /imperio-do-choco-main/public/$1.php [R=302,L]
+RewriteRule ^(produto|historia)\.html$ public/$1.html [R=302,L]
+RewriteRule ^logout\.php$ public/logout.php [R=302,L]
+RewriteRule ^(carrinho|admin-produtos|buscar-chocolates|finalizar-pedido|sessao-usuario|esqueci-senha|redefinir-senha)\.php$ public/$1.php [R=302,L]
 
 <FilesMatch "^\.env">
     Require all denied
 </FilesMatch>
-
-<FilesMatch "^(gerar-senha|teste_banco)\.php$">
-    Require all denied
-</FilesMatch>
-
-<Files "Imperio do Chocolate.html">
-    Require all denied
-</Files>
 
 <FilesMatch "\.(log|sql|md|txt)$">
     Require all denied

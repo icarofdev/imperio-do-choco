@@ -16,7 +16,7 @@ C:\xampp\php\php.exe database\migrate.php
 5. Se quiser o usuario administrador inicial, execute depois:
 
 ```sql
-SOURCE criar_admin.sql;
+SOURCE database/criar-admin.sql;
 ```
 
 ## O que as migracoes fazem

@@ -1,6 +1,10 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+*.tmp
+*.bak
+*.swp
+~$*
 
 .env
 .env.*
@@ -10,5 +14,5 @@ node_modules/
 vendor/
 
 *.log
-
-Imperio do Chocolate.html
+logs/
+.runtime/

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . "/conexao.php";
+require_once dirname(__DIR__) . "/app/conexao.php";
 
 header("Content-Type: text/plain; charset=UTF-8");
 
