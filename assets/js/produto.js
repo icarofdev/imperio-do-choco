@@ -1,10 +1,8 @@
 const produtoContainer = document.getElementById("produto-container");
 const HOME_ROUTE_STORAGE_KEY = "imperio_home_route";
-const THEME_STORAGE_KEY = "imperio_theme";
 const menuMobileToggle = document.getElementById("menu-mobile-toggle");
 const menuMobile = document.getElementById("menu-mobile");
 const menuMobileCloseButtons = document.querySelectorAll("[data-menu-mobile-close]");
-const menuMobileActionButtons = document.querySelectorAll("[data-mobile-action]");
 const menuMobileLinks = document.querySelectorAll(".menu-mobile__link, .menu-mobile__acao-link");
 let sessaoProduto = {
     autenticado: false,
@@ -36,25 +34,6 @@ function atualizarLinksDeRetorno() {
         const ancora = String(link.dataset.homeAnchor || "").replace(/^#/, "");
         link.setAttribute("href", ancora ? `${rotaHome}#${ancora}` : rotaHome);
     });
-}
-
-function aplicarTemaDaHome() {
-    const temaSalvo = localStorage.getItem(THEME_STORAGE_KEY);
-
-    if (temaSalvo === "dark" || temaSalvo === "light") {
-        document.body.setAttribute("data-theme", temaSalvo);
-        return;
-    }
-
-    const temaPreferido = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    document.body.setAttribute("data-theme", temaPreferido);
-}
-
-function alternarTemaProduto() {
-    const temaAtual = document.body.getAttribute("data-theme") === "dark" ? "dark" : "light";
-    const proximoTema = temaAtual === "dark" ? "light" : "dark";
-    localStorage.setItem(THEME_STORAGE_KEY, proximoTema);
-    document.body.setAttribute("data-theme", proximoTema);
 }
 
 function menuMobileAberto() {
@@ -239,7 +218,7 @@ function renderizarProduto(produto, relacionados) {
 
     const relacionadosHtml = relacionados.map((item) => `
         <a class="produto-relacionado" href="produto.html?id=${encodeURIComponent(item.slug)}">
-            <img src="${escapeHtml(item.imagem)}" alt="${escapeHtml(item.nome)}" loading="lazy">
+            <img src="${escapeHtml(item.imagem)}" alt="${escapeHtml(item.nome)}" loading="lazy" decoding="async">
             <p class="produto-relacionado__categoria">${escapeHtml(item.categoria || "Chocolate")}</p>
             <strong>${escapeHtml(item.nome)}</strong>
             <span>${escapeHtml(formatarPreco(item.preco))}</span>
@@ -259,7 +238,7 @@ function renderizarProduto(produto, relacionados) {
                     <div class="produto-galeria">
                         <div class="produto-imagem-principal">
                             <span class="produto-selo">${escapeHtml(destaque)}</span>
-                            <img id="produto-imagem-atual" src="${escapeHtml(galeria[0] || "")}" alt="${escapeHtml(produto.nome)}" loading="eager">
+                            <img id="produto-imagem-atual" src="${escapeHtml(galeria[0] || "")}" alt="${escapeHtml(produto.nome)}" loading="eager" decoding="async">
                         </div>
                         <div class="produto-miniaturas" aria-label="Miniaturas do produto">
                             ${miniaturas}
@@ -403,7 +382,6 @@ async function iniciarPaginaProduto() {
 }
 
 atualizarLinksDeRetorno();
-aplicarTemaDaHome();
 
 if (menuMobileToggle) {
     menuMobileToggle.addEventListener("click", () => {
@@ -422,18 +400,6 @@ menuMobileCloseButtons.forEach((button) => {
 
 menuMobileLinks.forEach((link) => {
     link.addEventListener("click", fecharMenuMobile);
-});
-
-menuMobileActionButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-        const action = button.dataset.mobileAction;
-
-        if (action === "theme") {
-            alternarTemaProduto();
-        }
-
-        fecharMenuMobile();
-    });
 });
 
 window.addEventListener("resize", () => {

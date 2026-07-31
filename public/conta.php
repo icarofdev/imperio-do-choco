@@ -158,18 +158,21 @@ $mostrarFormularioEndereco = $_SERVER["REQUEST_METHOD"] === "POST";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../assets/js/theme-init.js?v=20260731-3"></script>
     <title>Minha conta | Velle Dulcis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/admin.css?v=20260527-1">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260731-3">
+    <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
 <body class="account-page admin-page admin-page--account">
     <div class="admin-shell">
         <div class="admin-topbar">
             <a class="admin-topbar__voltar" href="index.php">Voltar para a vitrine</a>
 
-            <div class="admin-topbar__acoes">
+            <div class="admin-topbar__acoes" data-theme-toggle-host>
                 <span class="admin-topbar__usuario"><?php echo htmlspecialchars($nomeUsuario, ENT_QUOTES, "UTF-8"); ?></span>
                 <a class="admin-topbar__sair" href="logout.php">Sair</a>
             </div>

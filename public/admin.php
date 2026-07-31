@@ -24,16 +24,18 @@ $nomeUsuario = (string) ($_SESSION["usuario_nome"] ?? "Administrador");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../assets/js/theme-init.js?v=20260731-3"></script>
     <link rel="stylesheet" href="../assets/css/admin.css?v=20260527-1">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260731-3">
+    <script src="../assets/js/theme.js?v=20260731-3" defer></script>
     <title>Admin | Velle Dulcis</title>
 </head>
-<body>
-    <script src="../assets/js/theme-init.js"></script>
+<body class="admin-page">
     <main class="admin-shell">
         <header class="admin-topbar">
             <a class="admin-topbar__voltar" href="index.php">Voltar para a vitrine</a>
 
-            <div class="admin-topbar__acoes">
+            <div class="admin-topbar__acoes" data-theme-toggle-host>
                 <p id="admin-usuario" class="admin-topbar__usuario" aria-live="polite">
                     <?php echo "Logado como " . htmlspecialchars($nomeUsuario, ENT_QUOTES, "UTF-8"); ?>
                 </p>
@@ -162,7 +164,7 @@ $nomeUsuario = (string) ($_SESSION["usuario_nome"] ?? "Administrador");
 
                 <div class="admin-preview">
                     <div class="admin-preview__media">
-                        <img id="admin-preview-imagem" class="admin-preview__imagem" src="../assets/img/logo-velle-dulcis.png" alt="Previa do produto">
+                        <img id="admin-preview-imagem" class="admin-preview__imagem" src="../assets/images/products/product-tablete-classico.webp" alt="Prévia do produto" width="754" height="1000">
                     </div>
 
                     <div class="admin-preview__body">
@@ -269,7 +271,7 @@ $nomeUsuario = (string) ($_SESSION["usuario_nome"] ?? "Administrador");
             csrfToken: <?php echo json_encode(obterTokenCsrf(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>,
         };
     </script>
-    <script src="../assets/js/products-data.js?v=20260527-1"></script>
-    <script src="../assets/js/admin-painel.js?v=20260527-1"></script>
+    <script src="../assets/js/products-data.js?v=20260731-2"></script>
+    <script src="../assets/js/admin-painel.js?v=20260731-2"></script>
 </body>
 </html>

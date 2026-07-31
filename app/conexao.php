@@ -12,6 +12,7 @@ $pass = $databaseConfig["pass"];
 $appEnv = strtolower(lerVariavelAmbiente("APP_ENV", "development") ?? "development");
 $pdo = null;
 $databaseConnectionError = "";
+$databaseConnectionErrorCode = "";
 
 if (in_array($appEnv, ["prod", "production"], true) && ($user === "root" || $pass === "")) {
     $databaseConnectionError = "Configuracao de banco insegura para producao.";
@@ -25,10 +26,20 @@ if (in_array($appEnv, ["prod", "production"], true) && ($user === "root" || $pas
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_TIMEOUT => 5,
             ]
         );
     } catch (PDOException $exception) {
         $databaseConnectionError = "Erro na conexao com o banco de dados.";
+        $databaseConnectionErrorCode = (string) $exception->getCode();
+        error_log(sprintf(
+            "[Velle Dulcis][database] Falha PDO em %s:%s/%s (%s): %s",
+            $host,
+            $port,
+            $dbname,
+            $databaseConnectionErrorCode !== "" ? $databaseConnectionErrorCode : "sem codigo",
+            $exception->getMessage()
+        ));
     }
 }
 
@@ -68,12 +79,13 @@ function carregarVariaveisAmbiente(string $arquivo): void
             $valor = substr($valor, 1, -1);
         }
 
-        if (getenv($chave) === false) {
-            putenv("{$chave}={$valor}");
-        }
+        $valorExistente = $_ENV[$chave] ?? $_SERVER[$chave] ?? getenv($chave);
 
-        $_ENV[$chave] = $valor;
-        $_SERVER[$chave] = $valor;
+        if ($valorExistente === false || $valorExistente === null) {
+            putenv("{$chave}={$valor}");
+            $_ENV[$chave] = $valor;
+            $_SERVER[$chave] = $valor;
+        }
     }
 
     $arquivosCarregados[$arquivo] = true;
@@ -94,7 +106,7 @@ function obterConfiguracaoBanco(): array
 {
     return [
         "host" => lerVariavelAmbiente("DB_HOST", "127.0.0.1"),
-        "port" => lerVariavelAmbiente("DB_PORT", "3306"),
+        "port" => lerVariavelAmbiente("DB_PORT", "3307"),
         "dbname" => lerVariavelAmbiente("DB_NAME", "imperio_do_choco"),
         "user" => lerVariavelAmbiente("DB_USER", "root"),
         "pass" => lerVariavelAmbiente("DB_PASS", ""),

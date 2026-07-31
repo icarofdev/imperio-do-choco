@@ -8,7 +8,7 @@
     const OPTIONS = window.ADMIN_PANEL_OPTIONS || {};
     const REMOTE_API_URL = String(OPTIONS.remoteApiUrl || "admin-produtos.php").trim();
     const ADMIN_CSRF_TOKEN = String(OPTIONS.csrfToken || "");
-    const FALLBACK_IMAGE = "../assets/img/logo-velle-dulcis.png";
+    const FALLBACK_IMAGE = "../assets/images/products/product-tablete-classico.webp";
     const DEFAULT_PRODUCT_DESCRIPTION = "Um chocolate especial preparado para transformar qualquer momento em algo memorável.";
     const currencyFormatter = new Intl.NumberFormat("pt-BR", {
         style: "currency",

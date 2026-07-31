@@ -8,6 +8,13 @@ function iniciarSessaoSegura(): void
     }
 
     $httpsAtivo = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "" && $_SERVER["HTTPS"] !== "off";
+    $diretorioSessoes = dirname(__DIR__) . DIRECTORY_SEPARATOR . ".runtime" . DIRECTORY_SEPARATOR . "sessions";
+
+    if (!is_dir($diretorioSessoes) && !mkdir($diretorioSessoes, 0770, true) && !is_dir($diretorioSessoes)) {
+        throw new RuntimeException("Nao foi possivel preparar o diretorio privado de sessoes.");
+    }
+
+    session_save_path($diretorioSessoes);
 
     session_set_cookie_params([
         "lifetime" => 0,
@@ -18,7 +25,9 @@ function iniciarSessaoSegura(): void
         "samesite" => "Lax",
     ]);
 
-    session_start();
+    if (!session_start()) {
+        throw new RuntimeException("Nao foi possivel iniciar uma sessao segura.");
+    }
 }
 
 function regenerarSessaoAutenticada(): void

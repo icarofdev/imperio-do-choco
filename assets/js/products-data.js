@@ -1,7 +1,15 @@
 const STORAGE_KEY_CHOCOLATES = "meus_chocolates";
 const STORAGE_KEY_CHOCOLATES_REMOVIDOS = "meus_chocolates_removidos";
 const STORAGE_KEY_CHOCOLATES_BACKUP = "meus_chocolates_backup";
-const CATALOGO_BASE_URL = "../assets/data/catalogo-inicial.json";
+const CATALOGO_BASE_URL = "../assets/data/catalogo-inicial.json?v=20260731-2";
+const LEGACY_PRODUCT_SLUGS = new Set([
+    "jojo-moranguinho",
+    "beicinho-de-chocolate",
+    "six-server",
+    "paizao",
+    "jelly-belly-boba-milk-tea-28gr",
+    "milka-caramel-creme-100gr",
+]);
 
 function slugifyProductName(texto) {
     return String(texto || "")
@@ -244,7 +252,8 @@ async function carregarCatalogoCompleto() {
     const chocolatesRemotos = await buscarChocolatesRemotos();
     const chocolatesLocais = lerChocolatesLocais();
 
-    return mesclarChocolates(catalogoBase, chocolatesRemotos, chocolatesLocais);
+    return mesclarChocolates(catalogoBase, chocolatesRemotos, chocolatesLocais)
+        .filter((produto) => !LEGACY_PRODUCT_SLUGS.has(produto.slug));
 }
 
 async function carregarTodosChocolates() {

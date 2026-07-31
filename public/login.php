@@ -27,13 +27,21 @@ if (isset($_SESSION["usuario_id"])) {
 }
 
 $erro = "";
+$sucesso = isset($_SESSION["flash_cadastro_sucesso"]) && is_string($_SESSION["flash_cadastro_sucesso"])
+    ? $_SESSION["flash_cadastro_sucesso"]
+    : "";
+unset($_SESSION["flash_cadastro_sucesso"]);
 $emailPreenchido = "";
-$bancoDisponivel = bancoDeDadosDisponivel($pdo) && ($pdo instanceof PDO ? schemaUsuariosDisponivel($pdo) : false);
-$mensagemBancoIndisponivel = "O banco de dados esta indisponivel no momento. Tente novamente mais tarde.";
+$conexaoDisponivel = bancoDeDadosDisponivel($pdo);
+$schemaUsuariosDisponivel = $conexaoDisponivel && $pdo instanceof PDO && schemaUsuariosDisponivel($pdo);
+$bancoDisponivel = $conexaoDisponivel && $schemaUsuariosDisponivel;
+$mensagemBancoIndisponivel = !$conexaoDisponivel
+    ? "Não foi possível conectar ao banco de dados. Tente novamente em instantes."
+    : "O login está temporariamente indisponível porque a estrutura do banco precisa ser atualizada.";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $emailPreenchido = trim((string) ($_POST["email"] ?? ""));
-    $senha = trim((string) ($_POST["senha"] ?? ""));
+    $emailPreenchido = mb_strtolower(trim((string) ($_POST["email"] ?? "")), "UTF-8");
+    $senha = (string) ($_POST["senha"] ?? "");
 
     if (!tokenCsrfValido(obterTokenCsrfRequisicao())) {
         $erro = "Sessao expirada. Recarregue a pagina e tente novamente.";
@@ -60,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $erro = "Email ou senha invalidos.";
         } catch (PDOException $exception) {
+            error_log("[Velle Dulcis][login] Falha ao consultar usuario: " . $exception->getMessage());
             $erro = "Nao foi possivel validar o login agora. Tente novamente em instantes.";
         }
     }
@@ -70,14 +79,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../assets/js/theme-init.js?v=20260731-3"></script>
     <title>Entrar | Velle Dulcis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/login.css?v=20260527-1">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260731-3">
+    <link rel="stylesheet" href="../assets/css/registration.css?v=20260731-1">
+    <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
-<body class="login-body login-body--customer">
-    <script src="../assets/js/theme-init.js"></script>
+<body class="login-body login-body--customer" data-theme-toggle-floating>
     <main class="login-modal-shell">
         <section class="login-modal" aria-labelledby="login-title">
             <a class="login-modal__close" href="index.php" aria-label="Fechar e voltar para a vitrine">
@@ -86,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <div class="login-modal__intro">
                 <a class="login-modal__brand" href="index.php" aria-label="Voltar para a vitrine">
-                    <img src="../assets/img/logo-velle-dulcis.png" alt="Velle Dulcis">
+                    <img src="../assets/images/logos/velle-dulcis.png" alt="Velle Dulcis" width="459" height="543">
                 </a>
                 <h1 id="login-title">Login</h1>
                 <p>
@@ -96,6 +108,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <form method="post" class="login-form login-form--customer" novalidate>
                 <input type="hidden" name="csrf_token" value="<?php echo tokenCsrfHtml(); ?>">
+
+                <?php if ($sucesso !== ""): ?>
+                    <div class="auth-alert auth-alert--success" role="status" aria-live="polite">
+                        <span class="auth-alert__icon" aria-hidden="true">✓</span>
+                        <p><?php echo htmlspecialchars($sucesso, ENT_QUOTES, "UTF-8"); ?></p>
+                    </div>
+                <?php endif; ?>
 
                 <label class="login-form__field login-form__field--customer">
                     <span>Email*</span>

@@ -82,14 +82,16 @@ $linkValido = $bancoDisponivel && $token !== "" && $recuperacao !== null && $suc
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../assets/js/theme-init.js?v=20260731-3"></script>
     <title>Nova Senha | Velle Dulcis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/login.css?v=20260527-1">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260731-3">
+    <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
-<body class="login-body login-body--customer">
-    <script src="../assets/js/theme-init.js"></script>
+<body class="login-body login-body--customer" data-theme-toggle-floating>
     <main class="login-modal-shell">
         <section class="login-modal" aria-labelledby="nova-senha-title">
             <a class="login-modal__close" href="login.php" aria-label="Fechar e voltar para o login">
@@ -98,7 +100,7 @@ $linkValido = $bancoDisponivel && $token !== "" && $recuperacao !== null && $suc
 
             <div class="login-modal__intro">
                 <a class="login-modal__brand" href="index.php" aria-label="Voltar para a vitrine">
-                    <img src="../assets/img/logo-velle-dulcis.png" alt="Velle Dulcis">
+                    <img src="../assets/images/logos/velle-dulcis.png" alt="Velle Dulcis" width="459" height="543">
                 </a>
                 <h1 id="nova-senha-title">Nova senha</h1>
                 <p>

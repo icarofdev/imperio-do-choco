@@ -9,6 +9,7 @@
 4. Crie o banco `imperio_do_choco` no phpMyAdmin.
 
 5. Copie `.env.example` para `.env` e ajuste as credenciais do banco.
+   Nesta instalacao XAMPP, o MariaDB usa a porta `3307` porque a `3306` ja esta ocupada.
    Recomendacao senior: use um usuario dedicado da aplicacao, nao `root`.
 
 6. Rode as migracoes:
@@ -24,9 +25,9 @@
    Senha: use a senha definida no hash de `database/criar-admin.sql` e troque apos o primeiro acesso.
 
 10. Fluxo principal:
-   `http://localhost/imperio-do-choco-main/login.php`
+   `http://localhost/imperio-do-choco/public/login.php`
    depois
-   `http://localhost/imperio-do-choco-main/index.php`
+   `http://localhost/imperio-do-choco/public/index.php`
 
 ----------OBSERVACOES IMPORTANTES----------
 

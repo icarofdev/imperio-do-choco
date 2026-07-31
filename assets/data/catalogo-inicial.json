@@ -1,92 +1,92 @@
 [
   {
-    "id": "catalogo-jojo-moranguinho",
-    "slug": "jojo-moranguinho",
-    "img": "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_alpinellawithstrawberry100gr.jpeg?v=1761647260",
-    "nome": "Jojo Moranguinho",
-    "preco": 25.99,
-    "categoria": "Chocolate recheado",
-    "peso": "100g",
-    "ref": "VD-1001",
+    "id": "catalogo-brownie-signature",
+    "slug": "brownie-signature",
+    "img": "../assets/images/products/product-brownie-signature.webp",
+    "nome": "Brownie Signature",
+    "preco": 68.0,
+    "categoria": "Caixas premium",
+    "peso": "Caixa presenteável",
+    "ref": "VD-2001",
     "destaque": "Seleção da casa",
-    "descricao": "Chocolate com recheio cremoso e toque de morango para uma experiência doce e marcante.",
+    "descricao": "Brownies de chocolate intenso em uma caixa criada para presentear com elegância.",
     "imagens": [
-      "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_alpinellawithstrawberry100gr.jpeg?v=1761647260"
+      "../assets/images/products/product-brownie-signature.webp"
     ]
   },
   {
-    "id": "catalogo-beicinho-de-chocolate",
-    "slug": "beicinho-de-chocolate",
-    "img": "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_560cde9e09eea7d7770f1c1d5db26d91.jpeg?v=1768478586",
-    "nome": "Beicinho de Chocolate",
-    "preco": 25.99,
-    "categoria": "Chocolate artesanal",
-    "peso": "100g",
-    "ref": "VD-1002",
-    "destaque": "Favorito da vitrine",
-    "descricao": "Uma opção delicada e cremosa, ideal para presentear ou montar combinações especiais.",
+    "id": "catalogo-caixa-degustacao-30",
+    "slug": "caixa-degustacao-30",
+    "img": "../assets/images/products/product-caixa-degustacao-30.webp",
+    "nome": "Caixa Degustação 30",
+    "preco": 129.0,
+    "categoria": "Presentes",
+    "peso": "30 brigadeiros",
+    "ref": "VD-2002",
+    "destaque": "Experiência completa",
+    "descricao": "Trinta brigadeiros artesanais em uma seleção de sabores e texturas da casa.",
     "imagens": [
-      "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_560cde9e09eea7d7770f1c1d5db26d91.jpeg?v=1768478586"
+      "../assets/images/products/product-caixa-degustacao-30.webp"
     ]
   },
   {
-    "id": "catalogo-six-server",
-    "slug": "six-server",
-    "img": "https://www.rickdoces.com.br/estatico/rickdoces/images/produto/f93490b5f7cab0f200bc76fb4cddde1f.png?v=1774458174",
-    "nome": "Six Server",
-    "preco": 67,
-    "categoria": "Caixa premium",
-    "peso": "Edicao especial",
-    "ref": "VD-1003",
-    "destaque": "Edicao premium",
-    "descricao": "Seleção especial com visual marcante e proposta premium para momentos de destaque.",
+    "id": "catalogo-caixa-quarteto",
+    "slug": "caixa-quarteto",
+    "img": "../assets/images/products/product-caixa-quarteto.webp",
+    "nome": "Caixa Quarteto Velle",
+    "preco": 48.0,
+    "categoria": "Presentes",
+    "peso": "4 brigadeiros",
+    "ref": "VD-2003",
+    "destaque": "Presente delicado",
+    "descricao": "Quatro sabores autorais apresentados em uma caixa compacta de acabamento refinado.",
     "imagens": [
-      "https://www.rickdoces.com.br/estatico/rickdoces/images/produto/f93490b5f7cab0f200bc76fb4cddde1f.png?v=1774458174"
+      "../assets/images/products/product-caixa-quarteto.webp"
     ]
   },
   {
-    "id": "catalogo-paizao",
-    "slug": "paizao",
-    "img": "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_arnottstimtamoriginal163gr.jpeg?v=1761131171",
-    "nome": "Paizão",
-    "preco": 43.99,
-    "categoria": "Presente especial",
-    "peso": "163g",
-    "ref": "VD-1004",
-    "destaque": "Presente perfeito",
-    "descricao": "Produto pensado para presentear, com sabor intenso e excelente presença na vitrine.",
-    "imagens": [
-      "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_arnottstimtamoriginal163gr.jpeg?v=1761131171"
-    ]
-  },
-  {
-    "id": "catalogo-jelly-belly-boba-milk-tea-28gr",
-    "slug": "jelly-belly-boba-milk-tea-28gr",
-    "img": "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_jellybellybobamilktea28gr.jpeg?v=1772802157",
-    "nome": "Jelly Belly Boba Milk Tea 28gr",
-    "preco": 12.99,
-    "categoria": "Importados",
-    "peso": "28g",
-    "ref": "VD-1005",
-    "destaque": "Importado",
-    "descricao": "Doce importado com proposta divertida, textura leve e perfil ideal para kits variados.",
-    "imagens": [
-      "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_jellybellybobamilktea28gr.jpeg?v=1772802157"
-    ]
-  },
-  {
-    "id": "catalogo-milka-caramel-creme-100gr",
-    "slug": "milka-caramel-creme-100gr",
-    "img": "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_milkacaramelcreme100gr.jpeg?v=1666638362",
-    "nome": "Milka Caramel-Creme 100gr",
-    "preco": 12.99,
+    "id": "catalogo-tablete-classico",
+    "slug": "tablete-classico",
+    "img": "../assets/images/products/product-tablete-classico.webp",
+    "nome": "Tablete Clássico 54%",
+    "preco": 34.0,
     "categoria": "Tabletes",
-    "peso": "100g",
-    "ref": "VD-1006",
-    "destaque": "Caramelo cremoso",
-    "descricao": "Tablete com recheio suave de caramelo, excelente para quem busca um chocolate clássico e cremoso.",
+    "peso": "90 g",
+    "ref": "VD-2004",
+    "destaque": "Cacau selecionado",
+    "descricao": "Chocolate ao leite de perfil equilibrado, textura cremosa e final delicadamente intenso.",
     "imagens": [
-      "https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_milkacaramelcreme100gr.jpeg?v=1666638362"
+      "../assets/images/products/product-tablete-classico.webp"
+    ]
+  },
+  {
+    "id": "catalogo-trufa-velvet-cacao",
+    "slug": "trufa-velvet-cacao",
+    "img": "../assets/images/products/product-trufa-velvet-cacao.webp",
+    "nome": "Trufa Velvet Cacao",
+    "preco": 18.0,
+    "categoria": "Trufas",
+    "peso": "Unidade",
+    "ref": "VD-2005",
+    "destaque": "Textura aveludada",
+    "descricao": "Trufa de chocolate com interior cremoso e acabamento artesanal em camadas.",
+    "imagens": [
+      "../assets/images/products/product-trufa-velvet-cacao.webp"
+    ]
+  },
+  {
+    "id": "catalogo-tablete-morango",
+    "slug": "tablete-morango",
+    "img": "../assets/images/products/product-tablete-morango.webp",
+    "nome": "Tablete Morango Cremoso",
+    "preco": 38.0,
+    "categoria": "Tabletes",
+    "peso": "90 g",
+    "ref": "VD-2006",
+    "destaque": "Frutado e cremoso",
+    "descricao": "Chocolate ao leite com recheio cremoso de morango e contraste delicadamente frutado.",
+    "imagens": [
+      "../assets/images/products/product-tablete-morango.webp"
     ]
   }
 ]

@@ -3,7 +3,7 @@ Options -Indexes
 
 RewriteEngine On
 
-RewriteRule ^(?:app|database|logs)(?:/|$) - [F,L]
+RewriteRule ^(?:app|database|logs|backups|\.runtime)(?:/|$) - [F,L]
 RewriteRule ^\.env - [F,L]
 RewriteRule ^(?:TODO\.md|gerar-senha\.php|teste-banco\.php|teste_banco\.php)$ - [F,L]
 
@@ -15,7 +15,7 @@ RewriteRule ^esqueci_senha\.php$ public/esqueci-senha.php [R=302,L]
 RewriteRule ^redefinir_senha\.php$ public/redefinir-senha.php [R=302,L]
 
 RewriteRule ^(index|admin|cadastro|conta|login)\.php$ public/$1.php [R=302,L]
-RewriteRule ^(index|admin|cadastro|conta|login)\.html$ /imperio-do-choco-main/public/$1.php [R=302,L]
+RewriteRule ^(index|admin|cadastro|conta|login)\.html$ /imperio-do-choco/public/$1.php [R=302,L]
 RewriteRule ^(produto|historia)\.html$ public/$1.html [R=302,L]
 RewriteRule ^logout\.php$ public/logout.php [R=302,L]
 RewriteRule ^(carrinho|admin-produtos|buscar-chocolates|finalizar-pedido|sessao-usuario|esqueci-senha|redefinir-senha)\.php$ public/$1.php [R=302,L]

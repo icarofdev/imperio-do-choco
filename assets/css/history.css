@@ -1,0 +1,531 @@
+.pagina-historia {
+    --bg: #F2EDE7;
+    --primary: #64120C;
+    --gold: #AB7843;
+    --dark: #552919;
+    --radius: 20px;
+    --radius-lg: 32px;
+    --container: 1280px;
+    --line: rgba(171, 120, 67, 0.24);
+    --shadow: 0 24px 64px rgba(85, 41, 25, 0.1);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    width: 100%;
+    padding-top: 82px;
+    display: block;
+    overflow-x: clip;
+    background: var(--bg);
+    color: var(--dark);
+    font-family: "Manrope", sans-serif;
+}
+
+.pagina-historia *,
+.pagina-historia *::before,
+.pagina-historia *::after {
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.pagina-historia::before { display: none; }
+
+.pagina-historia a:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+}
+
+.pagina-historia .historia-topo {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 120;
+    width: 100%;
+    min-height: 82px;
+    padding: 0 max(24px, calc((100vw - var(--container)) / 2));
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) auto minmax(150px, 1fr);
+    align-items: center;
+    gap: 32px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(242, 237, 231, 0.94);
+    box-shadow: 0 8px 28px rgba(85, 41, 25, 0.05);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+.pagina-historia .historia-topo__marca {
+    justify-self: start;
+}
+
+.pagina-historia .historia-topo__nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(16px, 2vw, 28px);
+}
+
+.pagina-historia .historia-topo__nav a {
+    position: relative;
+    padding: 10px 0;
+    color: var(--dark);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    text-transform: none;
+    transition: color 250ms var(--ease);
+}
+
+.pagina-historia .historia-topo__nav a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 3px;
+    left: 0;
+    height: 1px;
+    border-radius: 999px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 250ms var(--ease);
+}
+
+.pagina-historia .historia-topo__nav a:hover,
+.pagina-historia .historia-topo__nav a[aria-current="page"] {
+    color: var(--primary);
+}
+
+.pagina-historia .historia-topo__nav a:hover::after,
+.pagina-historia .historia-topo__nav a[aria-current="page"]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.pagina-historia .historia-topo__acoes {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.pagina-historia .historia-topo__mobile { display: none; }
+
+.pagina-historia .historia-topo__mobile summary {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--dark);
+    cursor: pointer;
+    list-style: none;
+}
+
+.pagina-historia .historia-topo__mobile summary::-webkit-details-marker { display: none; }
+.pagina-historia .historia-topo__mobile summary svg { width: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; }
+
+.pagina-historia .historia-topo__mobile nav {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 18px;
+    width: min(300px, calc(100vw - 36px));
+    padding: 14px;
+    display: grid;
+    gap: 4px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg);
+    box-shadow: var(--shadow);
+}
+
+.pagina-historia .historia-topo__mobile nav a {
+    padding: 12px 14px;
+    border-radius: 12px;
+    color: var(--dark);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.pagina-historia .historia-topo__mobile nav a:hover,
+.pagina-historia .historia-topo__mobile nav a[aria-current="page"] {
+    background: rgba(171, 120, 67, 0.12);
+    color: var(--primary);
+}
+
+@media (max-width: 1080px) {
+    .pagina-historia .historia-topo { grid-template-columns: 140px 1fr 140px; }
+    .pagina-historia .historia-topo__nav { gap: 14px; }
+    .pagina-historia .historia-topo__nav a { font-size: 0.64rem; }
+}
+
+.pagina-historia .historia-pagina {
+    width: 100%;
+    max-width: none;
+    padding: 0 0 120px;
+}
+
+.pagina-historia .historia-abertura {
+    position: relative;
+    min-height: clamp(620px, 84vh, 860px);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.pagina-historia .historia-abertura__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    background: var(--dark);
+    transform: none;
+    animation: none;
+}
+
+.pagina-historia .historia-abertura__media img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center 56%;
+    transform: scale(1.015);
+}
+
+.pagina-historia .historia-abertura__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(100, 18, 12, 0.74);
+}
+
+.pagina-historia .historia-abertura::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 1;
+    height: 160px;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(242, 237, 231, 0), #F2EDE7);
+}
+
+.pagina-historia .historia-abertura__conteudo {
+    position: relative;
+    z-index: 2;
+    width: min(880px, calc(100% - 40px));
+    padding: 72px 0 112px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    text-align: center;
+    transform: none;
+}
+
+.pagina-historia .historia-abertura__conteudo::before { display: none; }
+
+.pagina-historia .historia-kicker {
+    margin: 0;
+    color: var(--gold);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.pagina-historia .historia-abertura h1 {
+    max-width: 11ch;
+    margin: 0;
+    color: var(--bg);
+    font-size: clamp(3.4rem, 7vw, 7.2rem);
+    font-weight: 500;
+    letter-spacing: -0.06em;
+    line-height: 0.92;
+    text-shadow: none;
+}
+
+.pagina-historia .historia-abertura p,
+.pagina-historia .historia-abertura span {
+    max-width: 58ch;
+    margin: 0;
+    color: rgba(242, 237, 231, 0.84);
+    font-size: clamp(0.96rem, 1.4vw, 1.1rem);
+    line-height: 1.75;
+    text-shadow: none;
+}
+
+.pagina-historia .historia-abertura span {
+    max-width: 44ch;
+    color: var(--bg);
+    font-weight: 600;
+}
+
+.pagina-historia .historia-editorial,
+.pagina-historia .historia-origem,
+.pagina-historia .historia-valores {
+    width: min(calc(100% - 48px), var(--container));
+    margin-inline: auto;
+}
+
+.pagina-historia .historia-editorial {
+    position: relative;
+    z-index: 3;
+    min-height: 720px;
+    margin-top: 88px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.06fr) minmax(420px, 0.94fr);
+    align-items: stretch;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--bg);
+    box-shadow: var(--shadow);
+}
+
+.pagina-historia .historia-editorial__imagem {
+    min-height: 720px;
+    overflow: hidden;
+    background: var(--dark);
+}
+
+.pagina-historia .historia-editorial__imagem img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center 48%;
+    transform: none;
+    filter: brightness(0.98);
+    transition: transform 700ms var(--ease), filter 700ms var(--ease);
+}
+
+.pagina-historia .historia-editorial:hover .historia-editorial__imagem img {
+    transform: scale(1.02);
+    filter: brightness(1.035);
+}
+
+.pagina-historia .historia-editorial__texto {
+    max-width: 640px;
+    padding: clamp(56px, 6vw, 88px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 22px;
+}
+
+.pagina-historia .historia-editorial__texto .historia-kicker,
+.pagina-historia .historia-origem__texto .historia-kicker {
+    color: var(--gold);
+}
+
+.pagina-historia .historia-editorial h2,
+.pagina-historia .historia-origem h2 {
+    max-width: 12ch;
+    margin: 0 0 6px;
+    color: var(--primary);
+    font-size: clamp(2.5rem, 4vw, 4.5rem);
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+}
+
+.pagina-historia .historia-editorial p,
+.pagina-historia .historia-origem p,
+.pagina-historia .historia-valores p {
+    max-width: 54ch;
+    margin: 0;
+    color: rgba(85, 41, 25, 0.72);
+    font-size: 0.98rem;
+    line-height: 1.78;
+}
+
+.pagina-historia .historia-editorial strong {
+    max-width: 50ch;
+    margin-top: 4px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    color: var(--primary);
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.7;
+}
+
+.pagina-historia .historia-origem {
+    padding: 128px 0 48px;
+    display: grid;
+    grid-template-columns: minmax(360px, 0.72fr) minmax(0, 1.28fr);
+    align-items: center;
+    gap: clamp(56px, 8vw, 112px);
+}
+
+.pagina-historia .historia-origem__texto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.pagina-historia .historia-origem__mosaico {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.pagina-historia .historia-origem__foto {
+    position: relative;
+    min-height: 280px;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(171, 120, 67, 0.08);
+    box-shadow: 0 16px 36px rgba(85, 41, 25, 0.08);
+}
+
+.pagina-historia .historia-origem__foto:nth-child(1),
+.pagina-historia .historia-origem__foto:nth-child(4) {
+    --mosaic-offset: 24px;
+    transform: translateY(var(--mosaic-offset));
+}
+
+.pagina-historia .historia-origem__foto img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    filter: brightness(0.98);
+    transition: transform 650ms var(--ease), filter 650ms var(--ease);
+}
+
+.pagina-historia .historia-origem__foto--um img { object-position: center; }
+.pagina-historia .historia-origem__foto--dois img { object-position: 54% center; }
+.pagina-historia .historia-origem__foto--tres img { object-position: center 44%; }
+.pagina-historia .historia-origem__foto--quatro img { object-position: center; }
+
+.pagina-historia .historia-origem__foto:hover img {
+    transform: scale(1.02);
+    filter: brightness(1.035);
+}
+
+.pagina-historia .historia-valores {
+    margin-top: 88px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: transparent;
+}
+
+.pagina-historia .historia-valores article {
+    min-height: 280px;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    border-right: 1px solid var(--line);
+    background: transparent;
+}
+
+.pagina-historia .historia-valores article:last-child { border-right: 0; }
+
+.pagina-historia .historia-valores span {
+    color: var(--gold);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+}
+
+.pagina-historia .historia-valores h3 {
+    max-width: 18ch;
+    margin: 0;
+    color: var(--primary);
+    font-size: 1.12rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+@media (max-width: 980px) {
+    .pagina-historia .historia-topo {
+        grid-template-columns: 1fr auto;
+    }
+
+    .pagina-historia .historia-topo__nav { display: none; }
+    .pagina-historia .historia-topo__mobile { display: block; }
+
+    .pagina-historia .historia-editorial {
+        min-height: 0;
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-historia .historia-editorial__imagem {
+        min-height: 520px;
+        max-height: 680px;
+    }
+
+    .pagina-historia .historia-editorial__texto {
+        max-width: 720px;
+        padding: 64px;
+    }
+
+    .pagina-historia .historia-origem {
+        grid-template-columns: 1fr;
+        gap: 64px;
+    }
+
+    .pagina-historia .historia-origem__texto { max-width: 680px; }
+    .pagina-historia .historia-valores { grid-template-columns: 1fr; }
+    .pagina-historia .historia-valores article { min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
+    .pagina-historia .historia-valores article:last-child { border-bottom: 0; }
+}
+
+@media (max-width: 640px) {
+    .pagina-historia { padding-top: 74px; }
+
+    .pagina-historia .historia-topo {
+        min-height: 74px;
+        padding-inline: 18px;
+    }
+
+    .pagina-historia .historia-topo__acoes { gap: 6px; }
+
+    .pagina-historia .historia-abertura { min-height: 620px; }
+    .pagina-historia .historia-abertura__conteudo { width: calc(100% - 32px); padding-bottom: 92px; }
+    .pagina-historia .historia-abertura h1 { font-size: clamp(3.1rem, 15vw, 4.8rem); }
+    .pagina-historia .historia-abertura::after { height: 110px; }
+
+    .pagina-historia .historia-editorial,
+    .pagina-historia .historia-origem,
+    .pagina-historia .historia-valores {
+        width: calc(100% - 32px);
+    }
+
+    .pagina-historia .historia-editorial { margin-top: 64px; border-radius: 24px; }
+    .pagina-historia .historia-editorial__imagem { min-height: 420px; }
+    .pagina-historia .historia-editorial__texto { padding: 44px 24px; }
+
+    .pagina-historia .historia-origem { padding-top: 88px; gap: 48px; }
+    .pagina-historia .historia-origem__mosaico {
+        grid-template-rows: repeat(2, minmax(170px, 1fr));
+        gap: 10px;
+    }
+
+    .pagina-historia .historia-origem__foto { min-height: 180px; border-radius: 14px; }
+    .pagina-historia .historia-origem__foto:nth-child(1),
+    .pagina-historia .historia-origem__foto:nth-child(4) { --mosaic-offset: 12px; }
+
+    .pagina-historia .historia-valores { margin-top: 72px; }
+    .pagina-historia .historia-valores article { padding: 36px 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-historia *,
+    .pagina-historia *::before,
+    .pagina-historia *::after {
+        scroll-behavior: auto;
+        transition-duration: 0.01ms;
+    }
+}

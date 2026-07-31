@@ -4,22 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../assets/js/theme-init.js?v=20260731-3"></script>
     <title>Produto | Velle Dulcis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?v=20260527-3">
+    <link rel="stylesheet" href="../assets/css/product.css?v=20260731-1">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260731-3">
+    <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
 
-<body>
-    <script src="../assets/js/theme-init.js"></script>
+<body class="pagina-produto">
 
     <header class="topo-site topo-site--produto">
-        <a class="marca-site" href="index.php" aria-label="Voltar para a vitrine" data-home-link>
-            <img class="marca-site__logo" src="../assets/img/logo-velle-dulcis.png" alt="Velle Dulcis">
+        <a class="marca-site brand-link" href="index.php" aria-label="Voltar para a vitrine" data-home-link>
+            <img class="marca-site__logo brand-logo" src="../assets/images/logos/velle-dulcis.png" alt="Velle Dulcis" width="459" height="543">
         </a>
 
         <nav class="menu-topo" aria-label="Principal">
+            <a href="index.php#inicio" data-home-link data-home-anchor="inicio">Início</a>
             <div class="menu-topo__item menu-topo__item--mega">
                 <a href="index.php#vitrine" data-home-link data-home-anchor="vitrine" class="menu-topo__link menu-topo__link--dropdown">
                     <span>Chocolate</span>
@@ -67,26 +71,31 @@
                     </div>
 
                     <div class="mega-menu__destaques">
-                        <a class="mega-menu__card" href="produto.html?id=jojo-moranguinho">
-                            <img src="https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_alpinellawithstrawberry100gr.jpeg?v=1761647260" alt="Jojo Moranguinho">
+                        <a class="mega-menu__card" href="produto.html?id=tablete-morango">
+                            <img src="../assets/images/products/product-tablete-morango.webp" alt="Tablete Morango Cremoso" width="839" height="1000">
                             <div class="mega-menu__card-conteudo">
                                 <span class="mega-menu__card-tag">Selecao da casa</span>
-                                <strong>Jojo Moranguinho</strong>
+                                <strong>Tablete Morango Cremoso</strong>
                             </div>
                         </a>
 
-                        <a class="mega-menu__card" href="produto.html?id=beicinho-de-chocolate">
-                            <img src="https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_560cde9e09eea7d7770f1c1d5db26d91.jpeg?v=1768478586" alt="Beicinho de Chocolate">
+                        <a class="mega-menu__card" href="produto.html?id=trufa-velvet-cacao">
+                            <img src="../assets/images/products/product-trufa-velvet-cacao.webp" alt="Trufa Velvet Cacao" width="750" height="1000">
                             <div class="mega-menu__card-conteudo">
                                 <span class="mega-menu__card-tag">Favorito da vitrine</span>
-                                <strong>Beicinho de Chocolate</strong>
+                                <strong>Trufa Velvet Cacao</strong>
                             </div>
                         </a>
                     </div>
                 </div>
             </div>
-            <a href="historia.html">Nossa historia</a>
+            <a href="index.php#colecoes" data-home-link data-home-anchor="colecoes">Coleções</a>
+            <a href="index.php#presentes" data-home-link data-home-anchor="presentes">Presentes</a>
+            <a href="historia.html">Nossa história</a>
+            <a href="index.php#contato" data-home-link data-home-anchor="contato">Contato</a>
         </nav>
+
+        <div class="acoes-topo" data-theme-toggle-host data-theme-toggle-class="acao-topo acao-topo--tema"></div>
 
         <button id="menu-mobile-toggle" class="menu-mobile-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-mobile">
             <svg class="menu-mobile-toggle__icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -110,12 +119,6 @@
                 </div>
 
                 <div class="menu-mobile__acoes">
-                    <button class="menu-mobile__acao" type="button" data-mobile-action="theme">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M21 12.8A8.5 8.5 0 1111.2 3a6.5 6.5 0 109.8 9.8z"></path>
-                        </svg>
-                        <span>Tema</span>
-                    </button>
                     <a class="menu-mobile__acao-link" href="index.php" data-home-link>
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M3 12l9-8 9 8"></path>
@@ -126,6 +129,9 @@
                 </div>
 
                 <nav class="menu-mobile__links" aria-label="Menu principal mobile">
+                    <a class="menu-mobile__link" href="index.php#inicio" data-home-link data-home-anchor="inicio">
+                        <span>Início</span>
+                    </a>
                     <a class="menu-mobile__link" href="index.php#vitrine" data-home-link data-home-anchor="vitrine">
                         <span>Chocolate</span>
                         <svg class="menu-mobile__link-seta" viewBox="0 0 24 24" aria-hidden="true">
@@ -133,12 +139,21 @@
                             <path d="M13 6l6 6-6 6"></path>
                         </svg>
                     </a>
+                    <a class="menu-mobile__link" href="index.php#colecoes" data-home-link data-home-anchor="colecoes">
+                        <span>Coleções</span>
+                    </a>
+                    <a class="menu-mobile__link" href="index.php#presentes" data-home-link data-home-anchor="presentes">
+                        <span>Presentes</span>
+                    </a>
                     <a class="menu-mobile__link" href="historia.html">
-                        <span>Nossa historia</span>
+                        <span>Nossa história</span>
                         <svg class="menu-mobile__link-seta" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M5 12h14"></path>
                             <path d="M13 6l6 6-6 6"></path>
                         </svg>
+                    </a>
+                    <a class="menu-mobile__link" href="index.php#contato" data-home-link data-home-anchor="contato">
+                        <span>Contato</span>
                     </a>
                 </nav>
             </aside>
@@ -149,8 +164,8 @@
         <div id="produto-container" class="produto-container"></div>
     </main>
 
-    <script src="../assets/js/products-data.js?v=20260527-1"></script>
-    <script src="../assets/js/produto.js?v=20260527-1"></script>
+    <script src="../assets/js/products-data.js?v=20260731-2"></script>
+    <script src="../assets/js/produto.js?v=20260731-2"></script>
 </body>
 
 </html>

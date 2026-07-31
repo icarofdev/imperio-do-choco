@@ -34,7 +34,6 @@ const popupBoasVindas = document.getElementById("popup-boas-vindas");
 const fecharPopupBoasVindas = document.getElementById("fechar-popup-boas-vindas");
 const popupAvisoConta = document.getElementById("popup-aviso-conta");
 const fecharPopupAvisoConta = document.getElementById("fechar-popup-aviso-conta");
-const btnTema = document.getElementById("btn-tema");
 const btnFinalizarPedido = document.getElementById("finalizar");
 const headerSite = document.querySelector(".topo-site");
 const menuMobileToggle = document.getElementById("menu-mobile-toggle");
@@ -43,97 +42,21 @@ const menuMobileCloseButtons = document.querySelectorAll("[data-menu-mobile-clos
 const menuMobileActionButtons = document.querySelectorAll("[data-mobile-action]");
 const menuMobileLinks = document.querySelectorAll(".menu-mobile__link, .menu-mobile__acao-link");
 const HOME_ROUTE_STORAGE_KEY = "imperio_home_route";
-const THEME_STORAGE_KEY = "imperio_theme";
 const VITRINE_SORT_STORAGE_KEY = "imperio_vitrine_sort";
 const VITRINE_SORT_OPTIONS = new Set(["recommended", "price-asc"]);
 const CART_SYNC_URL = "carrinho.php";
 const CHECKOUT_URL = "finalizar-pedido.php";
-const PRODUCT_IMAGE_FALLBACK = "../assets/img/logo-velle-dulcis.png";
+const PRODUCT_IMAGE_FALLBACK = "../assets/images/products/product-tablete-classico.webp";
 const APP_CSRF_TOKEN = String(window.APP_CSRF_TOKEN || "");
 const rotaHomeAtual = "index.php";
 const HEADER_COMPACT_ENTER_SCROLL = 80;
 const HEADER_COMPACT_EXIT_SCROLL = 28;
-const THEME_TRANSITION_CLASS = "tema-transicao-ativa";
-const THEME_TRANSITION_DURATION = 820;
-const REDUCE_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const MOBILE_MENU_CLOSE_DURATION = 320;
 
 aplicarLinkDaConta();
 sessionStorage.setItem(HOME_ROUTE_STORAGE_KEY, rotaHomeAtual);
 
-let timeoutAnimacaoTema;
 let timeoutFechamentoMenuMobile;
-
-function aplicarTema(theme) {
-    document.body.setAttribute("data-theme", theme);
-
-    if (!btnTema) {
-        return;
-    }
-
-    const temaEscuroAtivo = theme === "dark";
-    btnTema.setAttribute("aria-label", temaEscuroAtivo ? "Ativar modo claro" : "Ativar modo escuro");
-    btnTema.setAttribute("title", temaEscuroAtivo ? "Ativar modo claro" : "Ativar modo escuro");
-}
-
-function obterTemaInicial() {
-    const temaSalvo = localStorage.getItem(THEME_STORAGE_KEY);
-
-    if (temaSalvo === "dark" || temaSalvo === "light") {
-        return temaSalvo;
-    }
-
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
-
-function prefereMovimentoReduzido() {
-    return window.matchMedia(REDUCE_MOTION_QUERY).matches;
-}
-
-function obterOrigemAnimacaoTema(origem) {
-    if (origem && typeof origem.getBoundingClientRect === "function") {
-        const dimensoes = origem.getBoundingClientRect();
-
-        return {
-            x: dimensoes.left + dimensoes.width / 2,
-            y: dimensoes.top + dimensoes.height / 2,
-        };
-    }
-
-    return {
-        x: window.innerWidth * 0.5,
-        y: Math.min(96, window.innerHeight * 0.16),
-    };
-}
-
-function animarTransicaoDeTema(origem) {
-    if (prefereMovimentoReduzido()) {
-        document.body.classList.remove(THEME_TRANSITION_CLASS);
-        return;
-    }
-
-    const { x, y } = obterOrigemAnimacaoTema(origem);
-
-    document.body.style.setProperty("--tema-origem-x", `${x}px`);
-    document.body.style.setProperty("--tema-origem-y", `${y}px`);
-
-    document.body.classList.remove(THEME_TRANSITION_CLASS);
-    void document.body.offsetWidth;
-    document.body.classList.add(THEME_TRANSITION_CLASS);
-
-    clearTimeout(timeoutAnimacaoTema);
-    timeoutAnimacaoTema = window.setTimeout(() => {
-        document.body.classList.remove(THEME_TRANSITION_CLASS);
-    }, THEME_TRANSITION_DURATION);
-}
-
-function alternarTema(origem) {
-    const temaAtual = document.body.getAttribute("data-theme") === "dark" ? "dark" : "light";
-    const proximoTema = temaAtual === "dark" ? "light" : "dark";
-    localStorage.setItem(THEME_STORAGE_KEY, proximoTema);
-    aplicarTema(proximoTema);
-    animarTransicaoDeTema(origem || btnTema);
-}
 
 function menuMobileAberto() {
     return Boolean(menuMobile && menuMobile.classList.contains("ativo"));
@@ -197,14 +120,7 @@ function atualizarEstadoHeader() {
     }
 }
 
-aplicarTema(obterTemaInicial());
 atualizarEstadoHeader();
-
-if (btnTema) {
-    btnTema.addEventListener("click", (event) => {
-        alternarTema(event.currentTarget);
-    });
-}
 
 if (menuMobileToggle) {
     menuMobileToggle.addEventListener("click", () => {
@@ -234,10 +150,6 @@ menuMobileActionButtons.forEach((button) => {
         fecharMenuMobile();
 
         window.setTimeout(() => {
-            if (action === "theme") {
-                alternarTema(button);
-            }
-
             if (action === "search") {
                 abrirOverlayPesquisa();
             }
@@ -801,8 +713,9 @@ function aplicarFallbackImagensProdutos(raiz) {
 }
 
 function criarResumoCard(produto) {
-    const descricao = String(produto.descricao || "").trim();
-    return descricao || "Chocolate selecionado para uma experiencia delicada, presenteavel e marcante.";
+    const categoria = String(produto.categoria || "Chocolate").trim();
+    const peso = String(produto.peso || "").trim();
+    return [categoria, peso].filter(Boolean).join(" · ");
 }
 
 function obterTotalAvaliacoes(produto, index) {
@@ -1129,7 +1042,7 @@ function renderizarChocolates(chocolates) {
         card.innerHTML = `
             <a class="card__imagem-link" href="produto.html?id=${encodeURIComponent(choc.slug)}">
                 <div class="card__imagem-box">
-                    <img src="${escapeHtml(choc.imagem)}" alt="${escapeHtml(choc.nome)}">
+                    <img src="${escapeHtml(choc.imagem)}" alt="${escapeHtml(choc.nome)}" loading="lazy" decoding="async">
                 </div>
             </a>
             <div class="card__conteudo">
@@ -1152,7 +1065,7 @@ function renderizarChocolates(chocolates) {
         const botaoAdicionar = document.createElement("button");
         botaoAdicionar.type = "button";
         botaoAdicionar.className = "card__cta";
-        botaoAdicionar.textContent = "+";
+        botaoAdicionar.textContent = "Adicionar";
         botaoAdicionar.setAttribute("aria-label", `Adicionar ${choc.nome} ao carrinho`);
         botaoAdicionar.addEventListener("click", (event) => {
             event.preventDefault();

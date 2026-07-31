@@ -1,0 +1,507 @@
+:root,
+html[data-theme="light"] {
+    color-scheme: light;
+    --theme-background: #F2EDE7;
+    --theme-surface: #F2EDE7;
+    --theme-surface-soft: rgba(171, 120, 67, 0.08);
+    --theme-text-primary: #552919;
+    --theme-text-secondary: rgba(85, 41, 25, 0.72);
+    --theme-brand: #64120C;
+    --theme-accent: #AB7843;
+    --theme-border: rgba(85, 41, 25, 0.16);
+    --theme-header: rgba(242, 237, 231, 0.94);
+    --theme-shadow: rgba(85, 41, 25, 0.1);
+    --theme-on-brand: #F2EDE7;
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --theme-background: #160E0C;
+    --theme-surface: #211411;
+    --theme-surface-soft: #2C1A16;
+    --theme-text-primary: #F2EDE7;
+    --theme-text-secondary: rgba(242, 237, 231, 0.72);
+    --theme-brand: #AB7843;
+    --theme-accent: #AB7843;
+    --theme-border: rgba(242, 237, 231, 0.14);
+    --theme-header: rgba(22, 14, 12, 0.92);
+    --theme-shadow: rgba(22, 14, 12, 0.34);
+    --theme-on-brand: #F2EDE7;
+}
+
+html {
+    min-height: 100%;
+    background: var(--theme-background);
+}
+
+body {
+    background-color: var(--theme-background);
+}
+
+.theme-ready body,
+.theme-ready .topo-site,
+.theme-ready .historia-topo,
+.theme-ready .card,
+.theme-ready input,
+.theme-ready textarea,
+.theme-ready select,
+.theme-ready dialog {
+    transition:
+        background-color 250ms cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 250ms cubic-bezier(0.22, 1, 0.36, 1),
+        color 250ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-toggle {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+    padding: 0;
+    display: inline-grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle:hover {
+    border-color: var(--theme-accent);
+    color: var(--theme-accent);
+    transform: scale(1.04);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--theme-accent);
+    outline-offset: 4px;
+}
+
+.theme-toggle__icon {
+    position: absolute;
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition:
+        opacity 220ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-theme="light"] .theme-toggle__sun {
+    opacity: 0;
+    transform: rotate(-28deg) scale(0.72);
+}
+
+html[data-theme="light"] .theme-toggle__moon {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+}
+
+html[data-theme="dark"] .theme-toggle__sun {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+}
+
+html[data-theme="dark"] .theme-toggle__moon {
+    opacity: 0;
+    transform: rotate(28deg) scale(0.72);
+}
+
+.theme-toggle.is-switching .theme-toggle__icon {
+    animation: theme-icon-switch 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-toggle--floating {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 40;
+    border-color: var(--theme-border);
+    background: var(--theme-header);
+    color: var(--theme-text-primary);
+    box-shadow: 0 10px 30px var(--theme-shadow);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.login-body .theme-toggle--floating {
+    right: 76px;
+    left: auto;
+}
+
+@keyframes theme-icon-switch {
+    0% { opacity: 0.4; transform: rotate(-12deg) scale(0.78); }
+    100% { opacity: 1; }
+}
+
+/* Identidade compartilhada do header */
+
+body .topo-site .marca-site.brand-link,
+body .historia-topo .brand-link {
+    position: relative;
+    width: 140px;
+    height: 76px;
+    min-width: 140px;
+    display: block;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+body .topo-site .marca-site__logo.brand-logo,
+body .historia-topo .brand-logo {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 140px;
+    height: auto;
+    display: block;
+    border: 0;
+    background: transparent;
+    object-fit: contain;
+    transform: translateY(-45.5%);
+    filter: none;
+}
+
+body .topo-site.topo-site--compact .marca-site.brand-link,
+body.pagina-produto .topo-site .marca-site.brand-link {
+    width: 122px;
+    height: 66px;
+    min-width: 122px;
+}
+
+body .topo-site.topo-site--compact .marca-site__logo.brand-logo,
+body.pagina-produto .topo-site .marca-site__logo.brand-logo {
+    width: 122px;
+}
+
+/* Homepage */
+
+.pagina-principal .acao-topo--tema {
+    display: inline-grid;
+}
+
+html[data-theme="dark"] body.pagina-principal {
+    --bg: var(--theme-background);
+    --surface: var(--theme-surface);
+    --surface-strong: var(--theme-surface-soft);
+    --light-panel: var(--theme-surface);
+    --text: var(--theme-text-secondary);
+    --text-strong: var(--theme-text-primary);
+    --border: var(--theme-border);
+    --shadow: var(--theme-shadow);
+    --card-bg: var(--theme-surface);
+    --panel-bg: var(--theme-surface);
+    --chip-bg: rgba(171, 120, 67, 0.12);
+    --chip-hover: rgba(171, 120, 67, 0.2);
+    --input-bg: var(--theme-surface-soft);
+    --overlay-bg: rgba(22, 14, 12, 0.97);
+    --badge-bg: rgba(171, 120, 67, 0.14);
+    background: var(--theme-background);
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-principal .topo-site--compact {
+    background: var(--theme-header);
+    color: var(--theme-text-primary);
+    border-bottom: 1px solid var(--theme-border);
+    box-shadow: 0 8px 30px var(--theme-shadow);
+}
+
+html[data-theme="dark"] .pagina-principal .topo-site:not(.topo-site--compact) {
+    color: var(--theme-on-brand);
+}
+
+html[data-theme="dark"] .pagina-principal .home-hero,
+html[data-theme="dark"] .pagina-principal .presentes-editorial,
+html[data-theme="dark"] .pagina-principal .manifesto,
+html[data-theme="dark"] .pagina-principal .rodape-site {
+    color: var(--theme-on-brand);
+}
+
+html[data-theme="dark"] .pagina-principal .home-hero h1,
+html[data-theme="dark"] .pagina-principal .home-hero__acao,
+html[data-theme="dark"] .pagina-principal .presentes-editorial h2,
+html[data-theme="dark"] .pagina-principal .manifesto h2,
+html[data-theme="dark"] .pagina-principal .rodape-site h2 {
+    color: var(--theme-on-brand);
+}
+
+html[data-theme="dark"] .pagina-principal .home-hero__assinatura {
+    background: var(--theme-surface);
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-principal .novo-carrossel,
+html[data-theme="dark"] .pagina-principal .grid-chocolates,
+html[data-theme="dark"] .pagina-principal .service-notes {
+    background: var(--theme-background);
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-principal .novo-carrossel-titulo,
+html[data-theme="dark"] .pagina-principal .vitrine-intro h1,
+html[data-theme="dark"] .pagina-principal .card h3,
+html[data-theme="dark"] .pagina-principal .card__preco,
+html[data-theme="dark"] .pagina-principal .service-notes h3 {
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-principal .novo-carrossel-subtitulo,
+html[data-theme="dark"] .pagina-principal .vitrine-intro p:not(.vitrine-intro__kicker),
+html[data-theme="dark"] .pagina-principal .card__selo,
+html[data-theme="dark"] .pagina-principal .card__quantidade-info,
+html[data-theme="dark"] .pagina-principal .service-notes p {
+    color: var(--theme-text-secondary);
+}
+
+html[data-theme="dark"] .pagina-principal .slider-container,
+html[data-theme="dark"] .pagina-principal .slide,
+html[data-theme="dark"] .pagina-principal .card,
+html[data-theme="dark"] .pagina-principal .card__imagem-box,
+html[data-theme="dark"] .pagina-principal .vitrine-toolbar__sort,
+html[data-theme="dark"] .pagina-principal .painel-pesquisa,
+html[data-theme="dark"] .pagina-principal .sugestao-item,
+html[data-theme="dark"] .pagina-principal .resultado-pesquisa,
+html[data-theme="dark"] .pagina-principal #carrinho-lateral,
+html[data-theme="dark"] .pagina-principal .carrinho-resumo,
+html[data-theme="dark"] .pagina-principal .carrinho-vazio__resumo,
+html[data-theme="dark"] .pagina-principal .carrinho-vazio__item,
+html[data-theme="dark"] .pagina-principal #lista-carrinho > li {
+    border-color: var(--theme-border);
+    background: var(--theme-surface);
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-principal .slide h3,
+html[data-theme="dark"] .pagina-principal .carrinho-topo h3,
+html[data-theme="dark"] .pagina-principal .carrinho-fechar,
+html[data-theme="dark"] .pagina-principal .carrinho-resumo__linha,
+html[data-theme="dark"] .pagina-principal .painel-pesquisa h3,
+html[data-theme="dark"] .pagina-principal .resultado-pesquisa strong {
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-principal .vitrine-toolbar__button,
+html[data-theme="dark"] .pagina-principal .filtro-categoria,
+html[data-theme="dark"] .pagina-principal .pesquisa-campo,
+html[data-theme="dark"] .pagina-principal .pesquisa-atalho {
+    border-color: var(--theme-border);
+    background: var(--theme-surface-soft);
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-principal .filtro-categoria.ativo,
+html[data-theme="dark"] .pagina-principal .vitrine-toolbar__button.ativo {
+    border-color: var(--theme-accent);
+    background: var(--theme-accent);
+    color: var(--theme-background);
+}
+
+html[data-theme="dark"] .pagina-principal .overlay-pesquisa {
+    background: var(--overlay-bg);
+    color: var(--theme-text-primary);
+}
+
+/* Página de produto */
+
+html[data-theme="dark"] body.pagina-produto {
+    --bg: var(--theme-background);
+    --primary: var(--theme-accent);
+    --dark: var(--theme-text-primary);
+    --line: var(--theme-border);
+    --shadow: 0 22px 56px var(--theme-shadow);
+    background: var(--theme-background);
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-produto .topo-site--produto {
+    background: #64120C;
+    color: var(--theme-on-brand);
+    border-color: var(--theme-border);
+}
+
+html[data-theme="dark"] .pagina-produto .produto-galeria,
+html[data-theme="dark"] .pagina-produto .produto-essencia,
+html[data-theme="dark"] .pagina-produto .produto-info,
+html[data-theme="dark"] .pagina-produto .produto-story__bloco,
+html[data-theme="dark"] .pagina-produto .produto-relacionado,
+html[data-theme="dark"] .pagina-produto .produto-spec,
+html[data-theme="dark"] .pagina-produto .produto-story__item,
+html[data-theme="dark"] .pagina-produto .produto-estado,
+html[data-theme="dark"] .pagina-produto .mega-menu,
+html[data-theme="dark"] .pagina-produto .menu-mobile__painel {
+    border-color: var(--theme-border);
+    background: var(--theme-surface);
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-produto .produto-info h1,
+html[data-theme="dark"] .pagina-produto .produto-essencia h2,
+html[data-theme="dark"] .pagina-produto .produto-story__bloco h2,
+html[data-theme="dark"] .pagina-produto .produto-relacionados-head h2,
+html[data-theme="dark"] .pagina-produto .produto-spec strong,
+html[data-theme="dark"] .pagina-produto .produto-story__item strong,
+html[data-theme="dark"] .pagina-produto .produto-relacionado strong {
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-produto .produto-descricao,
+html[data-theme="dark"] .pagina-produto .produto-essencia p,
+html[data-theme="dark"] .pagina-produto .produto-story__bloco p,
+html[data-theme="dark"] .pagina-produto .produto-spec p,
+html[data-theme="dark"] .pagina-produto .produto-resumo-meta span {
+    color: var(--theme-text-secondary);
+}
+
+/* Página Nossa História */
+
+html[data-theme="dark"] body.pagina-historia {
+    --bg: var(--theme-background);
+    --primary: var(--theme-accent);
+    --dark: var(--theme-text-primary);
+    --line: var(--theme-border);
+    --shadow: 0 24px 64px var(--theme-shadow);
+    background: var(--theme-background);
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-topo {
+    border-color: var(--theme-border);
+    background: var(--theme-header);
+    color: var(--theme-text-primary);
+    box-shadow: 0 8px 28px var(--theme-shadow);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-topo__nav a {
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-topo__mobile summary,
+html[data-theme="dark"] .pagina-historia .historia-topo__mobile nav a {
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-topo__mobile nav {
+    border-color: var(--theme-border);
+    background: var(--theme-surface);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-abertura::after {
+    background: linear-gradient(180deg, rgba(22, 14, 12, 0), var(--theme-background));
+}
+
+html[data-theme="dark"] .pagina-historia .historia-abertura h1,
+html[data-theme="dark"] .pagina-historia .historia-abertura p,
+html[data-theme="dark"] .pagina-historia .historia-abertura span {
+    color: var(--theme-on-brand);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-editorial {
+    border-color: var(--theme-border);
+    background: var(--theme-surface);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-editorial h2,
+html[data-theme="dark"] .pagina-historia .historia-editorial strong,
+html[data-theme="dark"] .pagina-historia .historia-origem h2,
+html[data-theme="dark"] .pagina-historia .historia-valores h3 {
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-editorial p,
+html[data-theme="dark"] .pagina-historia .historia-origem p,
+html[data-theme="dark"] .pagina-historia .historia-valores p {
+    color: var(--theme-text-secondary);
+}
+
+html[data-theme="dark"] .pagina-historia .historia-origem__foto {
+    border-color: var(--theme-border);
+    background: var(--theme-surface-soft);
+    box-shadow: 0 16px 36px var(--theme-shadow);
+}
+
+/* Formulários e áreas administrativas */
+
+html[data-theme="dark"] body.login-body,
+html[data-theme="dark"] body.admin-page,
+html[data-theme="dark"] body.account-page {
+    color: var(--theme-text-primary);
+}
+
+html[data-theme="dark"] body.login-body {
+    --bg: var(--theme-background);
+    --surface: rgba(33, 20, 17, 0.96);
+    --surface-strong: var(--theme-surface-soft);
+    --text: var(--theme-text-primary);
+    --text-soft: var(--theme-text-secondary);
+    --accent: var(--theme-accent);
+    --accent-dark: var(--theme-accent);
+    --border: var(--theme-border);
+    --shadow: var(--theme-shadow);
+}
+
+html[data-theme="dark"] body.admin-page,
+html[data-theme="dark"] body.account-page {
+    --page-bg: var(--theme-background);
+    --page-bg-soft: var(--theme-surface);
+    --surface: rgba(33, 20, 17, 0.96);
+    --surface-strong: var(--theme-surface-soft);
+    --surface-soft: var(--theme-surface);
+    --border: var(--theme-border);
+    --border-strong: rgba(242, 237, 231, 0.26);
+    --text-primary: var(--theme-text-primary);
+    --text-secondary: var(--theme-text-secondary);
+    --text-muted: rgba(242, 237, 231, 0.54);
+    --accent: var(--theme-accent);
+    --accent-strong: #F2EDE7;
+    --accent-soft: rgba(171, 120, 67, 0.12);
+    --shadow-sm: 0 14px 28px rgba(22, 14, 12, 0.24);
+    --shadow-md: 0 24px 48px rgba(22, 14, 12, 0.34);
+}
+
+.admin-topbar .theme-toggle {
+    border-color: var(--border);
+    background: var(--surface-strong);
+    color: var(--text-primary);
+}
+
+@media (max-width: 980px) {
+    body .topo-site .marca-site.brand-link,
+    body .historia-topo .brand-link {
+        width: 122px;
+        height: 66px;
+        min-width: 122px;
+    }
+
+    body .topo-site .marca-site__logo.brand-logo,
+    body .historia-topo .brand-logo {
+        width: 122px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-ready body,
+    .theme-ready .topo-site,
+    .theme-ready .historia-topo,
+    .theme-ready .card,
+    .theme-ready input,
+    .theme-ready textarea,
+    .theme-ready select,
+    .theme-ready dialog,
+    .theme-toggle,
+    .theme-toggle__icon {
+        transition: none;
+        animation: none;
+    }
+}

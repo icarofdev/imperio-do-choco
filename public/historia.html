@@ -4,100 +4,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../assets/js/theme-init.js?v=20260731-3"></script>
     <title>Nossa História | Velle Dulcis</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?v=20260602-7">
+    <link rel="stylesheet" href="../assets/css/history.css?v=20260731-1">
+    <link rel="stylesheet" href="../assets/css/animations.css?v=20260731-3">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260731-3">
+    <script src="../assets/js/theme.js?v=20260731-3" defer></script>
+    <script src="../assets/js/scroll-reveal.js?v=20260731-3" defer></script>
 </head>
 
 <body class="pagina-historia">
-    <script src="../assets/js/theme-init.js"></script>
-
     <header class="historia-topo">
-        <a class="historia-topo__marca" href="index.php" aria-label="Voltar para a vitrine">
-            <span>Velle Dulcis</span>
-            <small>Chocolates</small>
+        <a class="historia-topo__marca brand-link" href="index.php" aria-label="Velle Dulcis — voltar para a página inicial">
+            <img class="brand-logo" src="../assets/images/logos/velle-dulcis.png" alt="Velle Dulcis" width="459" height="543">
         </a>
 
         <nav class="historia-topo__nav" aria-label="Principal">
+            <a href="index.php#inicio">Início</a>
             <a href="index.php#vitrine">Chocolate</a>
+            <a href="index.php#colecoes">Coleções</a>
+            <a href="index.php#presentes">Presentes</a>
             <a href="historia.html" aria-current="page">Nossa história</a>
+            <a href="index.php#contato">Contato</a>
         </nav>
+
+        <div class="historia-topo__acoes" data-theme-toggle-host>
+            <details class="historia-topo__mobile">
+                <summary aria-label="Abrir menu de navegação">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 7h16M4 12h16M4 17h16"></path>
+                    </svg>
+                </summary>
+                <nav aria-label="Principal mobile">
+                    <a href="index.php#inicio">Início</a>
+                    <a href="index.php#vitrine">Chocolate</a>
+                    <a href="index.php#colecoes">Coleções</a>
+                    <a href="index.php#presentes">Presentes</a>
+                    <a href="historia.html" aria-current="page">Nossa história</a>
+                    <a href="index.php#contato">Contato</a>
+                </nav>
+            </details>
+        </div>
     </header>
 
     <main class="historia-pagina">
         <section class="historia-abertura" aria-labelledby="historia-titulo">
-            <div class="historia-abertura__media" aria-hidden="true"></div>
+            <div class="historia-abertura__media" aria-hidden="true" data-reveal="scale">
+                <img src="../assets/images/banners/hero-caixa-presente.webp" alt="" width="960" height="1280" fetchpriority="high">
+            </div>
             <div class="historia-abertura__overlay"></div>
 
             <div class="historia-abertura__conteudo">
-                <p class="historia-kicker">Doce, artesanal e intencional</p>
-                <h1 id="historia-titulo">Chocolate feito para virar lembrança</h1>
-                <p>Uma marca criada para transformar sabores simples em momentos bonitos, presentes delicados e experiências com presença.</p>
-                <span>Da primeira ideia ao acabamento final, tudo nasce com tempo, cuidado e carinho.</span>
+                <p class="historia-kicker" data-reveal>Doce, artesanal e intencional</p>
+                <h1 id="historia-titulo" data-reveal style="--reveal-delay: 100ms">Chocolate feito para virar lembrança</h1>
+                <p data-reveal style="--reveal-delay: 200ms">Uma marca criada para transformar sabores simples em momentos bonitos, presentes delicados e experiências com presença.</p>
+                <span data-reveal style="--reveal-delay: 300ms">Da primeira ideia ao acabamento final, tudo nasce com tempo, cuidado e carinho.</span>
             </div>
         </section>
 
         <section class="historia-editorial" aria-labelledby="historia-artesanal">
-            <div class="historia-editorial__imagem" aria-hidden="true">
-                <img src="../assets/img/imagemcauda.jpg" alt="">
+            <div class="historia-editorial__imagem" data-reveal="right">
+                <img src="../assets/images/about/chocolate-drip-closeup.webp" alt="Chocolate derretido formando uma textura lisa e brilhante" width="611" height="1200" loading="lazy">
             </div>
 
             <article class="historia-editorial__texto">
-                <p class="historia-kicker">Nossa origem</p>
-                <h2 id="historia-artesanal">Chocolate artesanal brasileiro</h2>
-                <p>
+                <p class="historia-kicker" data-reveal style="--reveal-delay: 0ms">Nossa origem</p>
+                <h2 id="historia-artesanal" data-reveal style="--reveal-delay: 100ms">Chocolate artesanal brasileiro</h2>
+                <p data-reveal style="--reveal-delay: 190ms">
                     A Velle Dulcis nasceu em novembro de 2025, durante uma feira escolar, com uma ideia simples:
                     criar chocolates que transmitissem cuidado, identidade e afeto em cada detalhe.
                 </p>
-                <p>
+                <p data-reveal style="--reveal-delay: 290ms">
                     Desde o início, pensamos em sabores, apresentação e experiência. Cada escolha da marca existe
                     para deixar o chocolate mais bonito, mais presenteável e mais marcante para quem recebe.
                 </p>
-                <p>
+                <p data-reveal style="--reveal-delay: 390ms">
                     O nome Velle Dulcis resume essa proposta: oferecer doces que valorizam pequenos momentos e
                     transformam uma lembrança simples em algo especial.
                 </p>
-                <strong>Para nós, grandes ideias podem nascer de pequenos começos quando existe dedicação em cada etapa.</strong>
+                <strong data-reveal style="--reveal-delay: 490ms">Para nós, grandes ideias podem nascer de pequenos começos quando existe dedicação em cada etapa.</strong>
             </article>
         </section>
 
         <section class="historia-origem" aria-labelledby="historia-cuidado">
             <div class="historia-origem__texto">
-                <p class="historia-kicker">Feito com intenção</p>
-                <h2 id="historia-cuidado">O cuidado por trás de cada detalhe</h2>
-                <p>
+                <p class="historia-kicker" data-reveal>Feito com intenção</p>
+                <h2 id="historia-cuidado" data-reveal style="--reveal-delay: 100ms">O cuidado por trás de cada detalhe</h2>
+                <p data-reveal style="--reveal-delay: 200ms">
                     Nosso processo valoriza a aparência, a textura e a sensação de presente. Trabalhamos para que
                     cada chocolate pareça escolhido com atenção, seja para dividir, presentear ou guardar como uma
                     pequena pausa doce no dia.
                 </p>
-                <p>
+                <p data-reveal style="--reveal-delay: 300ms">
                     A inspiração vem do chocolate artesanal: menos pressa, mais acabamento e uma relação mais
                     próxima entre quem prepara e quem experimenta.
                 </p>
             </div>
 
             <div class="historia-origem__mosaico" aria-label="Detalhes visuais de chocolate artesanal">
-                <span class="historia-origem__foto historia-origem__foto--um"></span>
-                <span class="historia-origem__foto historia-origem__foto--dois"></span>
-                <span class="historia-origem__foto historia-origem__foto--tres"></span>
-                <span class="historia-origem__foto historia-origem__foto--quatro"></span>
+                <figure class="historia-origem__foto historia-origem__foto--um" data-reveal="scale" style="--reveal-delay: 0ms">
+                    <img src="../assets/images/lifestyle/brigadeiro-artesanal-campaign.webp" alt="Brigadeiro artesanal com acabamento de chocolate" width="1024" height="1024" loading="lazy">
+                </figure>
+                <figure class="historia-origem__foto historia-origem__foto--dois" data-reveal="scale" style="--reveal-delay: 100ms">
+                    <img src="../assets/images/lifestyle/bolo-pote-caramelo.webp" alt="Bolo de pote com camadas de chocolate, caramelo e nozes" width="1309" height="816" loading="lazy">
+                </figure>
+                <figure class="historia-origem__foto historia-origem__foto--tres" data-reveal="scale" style="--reveal-delay: 200ms">
+                    <img src="../assets/images/products/product-tablete-morango.webp" alt="Tablete Velle Dulcis com recheio cremoso de morango" width="839" height="1000" loading="lazy">
+                </figure>
+                <figure class="historia-origem__foto historia-origem__foto--quatro" data-reveal="scale" style="--reveal-delay: 300ms">
+                    <img src="../assets/images/products/product-brownie-signature.webp" alt="Caixa de brownies premium Velle Dulcis" width="1000" height="1000" loading="lazy">
+                </figure>
             </div>
         </section>
 
         <section class="historia-valores" aria-label="Valores da Velle Dulcis">
-            <article>
+            <article data-reveal style="--reveal-delay: 0ms">
                 <span>01</span>
-                <h3>Sabor com presenca</h3>
+                <h3>Sabor com presença</h3>
                 <p>Chocolates pensados para encantar antes, durante e depois da primeira mordida.</p>
             </article>
-            <article>
+            <article data-reveal style="--reveal-delay: 110ms">
                 <span>02</span>
                 <h3>Detalhe visual</h3>
                 <p>Uma apresentação delicada, elegante e coerente com a experiência da marca.</p>
             </article>
-            <article>
+            <article data-reveal style="--reveal-delay: 220ms">
                 <span>03</span>
                 <h3>Afeto em cada etapa</h3>
                 <p>Do preparo ao atendimento, a proposta é fazer tudo com intenção e proximidade.</p>

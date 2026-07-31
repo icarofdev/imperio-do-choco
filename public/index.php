@@ -26,23 +26,27 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velle Dulcis</title>
+    <script src="../assets/js/theme-init.js?v=20260731-3"></script>
+    <title>Velle Dulcis — Chocolates que transformam momentos</title>
+    <meta name="description" content="Chocolates artesanais e presentes autorais Velle Dulcis, criados para transformar pequenos gestos em memórias inesquecíveis.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?v=20260602-8">
+    <link rel="stylesheet" href="../assets/css/premium-home.css?v=20260731-2">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260731-3">
+    <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
 
 <body class="pagina-carregando pagina-principal">
-    <script src="../assets/js/theme-init.js"></script>
-
     <header class="topo-site">
-        <div class="marca-site">
-            <img class="marca-site__logo" src="../assets/img/logo-velle-dulcis.png" alt="Velle Dulcis">
-        </div>
+        <a class="marca-site brand-link" href="#inicio" aria-label="Velle Dulcis — voltar ao início">
+            <img class="marca-site__logo brand-logo" src="../assets/images/logos/velle-dulcis.png" alt="Velle Dulcis" width="459" height="543">
+        </a>
 
         <nav class="menu-topo" aria-label="Principal">
+            <a class="menu-topo__inicio" href="#inicio">Início</a>
             <div class="menu-topo__item menu-topo__item--mega">
                 <a href="#vitrine" class="menu-topo__link menu-topo__link--dropdown">
                     <span>Chocolate</span>
@@ -90,33 +94,31 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
                     </div>
 
                     <div class="mega-menu__destaques">
-                        <a class="mega-menu__card" href="produto.html?id=jojo-moranguinho">
-                            <img src="https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_alpinellawithstrawberry100gr.jpeg?v=1761647260" alt="Jojo Moranguinho">
+                        <a class="mega-menu__card" href="produto.html?id=tablete-morango">
+                            <img src="../assets/images/products/product-tablete-morango.webp" alt="Tablete Morango Cremoso" width="839" height="1000">
                             <div class="mega-menu__card-conteudo">
                                 <span class="mega-menu__card-tag">Seleção da casa</span>
-                                <strong>Jojo Moranguinho</strong>
+                                <strong>Tablete Morango Cremoso</strong>
                             </div>
                         </a>
 
-                        <a class="mega-menu__card" href="produto.html?id=beicinho-de-chocolate">
-                            <img src="https://www.rickdoces.com.br/estatico/rickdoces/images/temp/620_560cde9e09eea7d7770f1c1d5db26d91.jpeg?v=1768478586" alt="Beicinho de Chocolate">
+                        <a class="mega-menu__card" href="produto.html?id=trufa-velvet-cacao">
+                            <img src="../assets/images/products/product-trufa-velvet-cacao.webp" alt="Trufa Velvet Cacao" width="750" height="1000">
                             <div class="mega-menu__card-conteudo">
                                 <span class="mega-menu__card-tag">Favorito da vitrine</span>
-                                <strong>Beicinho de Chocolate</strong>
+                                <strong>Trufa Velvet Cacao</strong>
                             </div>
                         </a>
                     </div>
                 </div>
             </div>
+            <a class="menu-topo__colecoes" href="#colecoes">Coleções</a>
+            <a class="menu-topo__presentes" href="#presentes">Presentes</a>
             <a href="historia.html">Nossa história</a>
+            <a class="menu-topo__contato" href="#contato">Contato</a>
         </nav>
 
-        <div class="acoes-topo">
-            <button id="btn-tema" class="acao-topo acao-topo--tema" type="button" aria-label="Alternar modo escuro" title="Alternar tema">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M21 12.8A8.5 8.5 0 1111.2 3a6.5 6.5 0 109.8 9.8z"></path>
-                </svg>
-            </button>
+        <div class="acoes-topo" data-theme-toggle-host data-theme-toggle-class="acao-topo acao-topo--tema">
             <button id="abrir-pesquisa" class="acao-topo" type="button" aria-label="Buscar">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="11" cy="11" r="7.5"></circle>
@@ -188,12 +190,6 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
                 </div>
 
                 <div class="menu-mobile__acoes">
-                    <button class="menu-mobile__acao" type="button" data-mobile-action="theme">
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M21 12.8A8.5 8.5 0 1111.2 3a6.5 6.5 0 109.8 9.8z"></path>
-                        </svg>
-                        <span>Tema</span>
-                    </button>
                     <button class="menu-mobile__acao" type="button" data-mobile-action="search">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <circle cx="11" cy="11" r="7.5"></circle>
@@ -223,13 +219,10 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
                 </div>
 
                 <nav class="menu-mobile__links" aria-label="Menu principal mobile">
-                    <a class="menu-mobile__link" href="#vitrine">
-                        <span>Chocolate</span>
-                        <svg class="menu-mobile__link-seta" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M5 12h14"></path>
-                            <path d="M13 6l6 6-6 6"></path>
-                        </svg>
-                    </a>
+                    <a class="menu-mobile__link" href="#inicio"><span>Início</span></a>
+                    <a class="menu-mobile__link" href="#vitrine"><span>Chocolate</span></a>
+                    <a class="menu-mobile__link" href="#colecoes"><span>Coleções</span></a>
+                    <a class="menu-mobile__link" href="#presentes"><span>Presentes</span></a>
                     <a class="menu-mobile__link" href="historia.html">
                         <span>Nossa história</span>
                         <svg class="menu-mobile__link-seta" viewBox="0 0 24 24" aria-hidden="true">
@@ -237,6 +230,7 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
                             <path d="M13 6l6 6-6 6"></path>
                         </svg>
                     </a>
+                    <a class="menu-mobile__link" href="#contato"><span>Contato</span></a>
                     <?php if (!$usuarioAutenticado): ?>
                         <a class="menu-mobile__link" href="cadastro.php">
                             <span>Criar conta</span>
@@ -296,78 +290,57 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
     </div>
 
     <main class="home-main">
-        <section class="home-hero" aria-labelledby="home-hero-title">
+        <section id="inicio" class="home-hero" aria-labelledby="home-hero-title">
             <div class="home-hero__conteudo">
                 <span class="home-hero__rotulo">Velle Dulcis</span>
-                <h1 id="home-hero-title">Chocolate com presença de presente</h1>
-                <p>Uma vitrine mais calma, elegantemente pronta para mostrar os sabores especiais da casa.</p>
+                <h1 id="home-hero-title">O extraordinário cabe em um instante.</h1>
+                <p>Chocolate artesanal, acabamento impecável e sabores que transformam pequenos gestos em memórias inesquecíveis.</p>
                 <div class="home-hero__acoes">
                     <a href="#vitrine" class="home-hero__acao home-hero__acao--primaria">Ver chocolates</a>
                     <a href="historia.html" class="home-hero__acao">Nossa história</a>
                 </div>
             </div>
+            <div class="home-hero__visual" aria-hidden="true">
+                <span class="home-hero__halo"></span>
+                <img src="../assets/images/products/product-caixa-degustacao-30.webp" alt="" width="535" height="702" fetchpriority="high">
+                <span class="home-hero__assinatura">Feito para sentir</span>
+            </div>
         </section>
 
       <!-- NOVO CARROSSEL 3D -->
 
-<section class="novo-carrossel">
+<section id="colecoes" class="novo-carrossel reveal-section">
 
     <h2 class="novo-carrossel-titulo">
-        Chocolates Premium
+        Coleções com assinatura
     </h2>
+    <p class="novo-carrossel-subtitulo">Criações autorais para celebrar o sabor, o gesto e tudo o que fica na memória.</p>
 
     <div class="slider-3d">
 
-        <button class="slider-btn prev">
+        <button class="slider-btn prev" type="button" aria-label="Coleção anterior">
             &#10094;
         </button>
 
         <div class="slider-container">
 
     <div class="slide active">
-        <img src="WhatsApp Image 2026-05-12 at 08.21.24.jpeg" alt="">
-        <h3>Trufle d'Or</h3>
+        <img src="../assets/images/lifestyle/brigadeiro-artesanal-campaign.webp" alt="Brigadeiro artesanal Velle Dulcis" width="1024" height="1024" loading="lazy">
+        <h3>Arte da doçura</h3>
     </div>
 
     <div class="slide">
-        <img src="WhatsApp Image 2026-05-12 at 09.17.31.jpeg" alt="">
-        <h3>Praline de Liège</h3>
+        <img src="../assets/images/lifestyle/bolo-pote-caramelo.webp" alt="Bolo de pote de caramelo, chocolate e nozes" width="1309" height="816" loading="lazy">
+        <h3>Momentos de colher</h3>
     </div>
 
     <div class="slide">
-        <img src="WhatsApp Image 2026-05-14 at 10.40.57.jpeg" alt="">
-        <h3>Coeur Framboise</h3>
-    </div>
-
-    <div class="slide">
-        <img src="WhatsApp Image 2026-05-14 at 11.50.05.jpeg" alt="">
-        <h3>Gianduja Swirl</h3>
-    </div>
-
-    <div class="slide">
-        <img src="WhatsApp Image 2026-05-14 at 10.56.35.jpeg" alt="">
-        <h3>Mendiant Deluxe</h3>
-    </div>
-
-    <!-- NOVOS -->
-
-    <div class="slide">
-        <img src="WhatsApp Image 2026-05-14 at 11.52.17.jpeg" alt="">
-        <h3>Noisette Royale</h3>
-    </div>
-
-    <div class="slide">
-        <img src="WhatsApp Image 2026-05-14 at 11.55.52.jpeg" alt="">
-        <h3>Velvet Cacao</h3>
-    </div>
-
-    <div class="slide">
-        <img src="WhatsApp Image 2026-05-14 at 12.04.47.jpeg" alt="">
-        <h3>Caramel Étoilé</h3>
+        <img src="../assets/images/banners/hero-caixa-presente.webp" alt="Caixa presenteável com seleção de brigadeiros Velle Dulcis" width="960" height="1280" loading="lazy">
+        <h3>Presentes autorais</h3>
     </div>
 
 </div>
-        <button class="slider-btn next">
+        <button class="slider-btn next" type="button" aria-label="Próxima coleção">
             &#10095;
         </button>
 
@@ -376,6 +349,18 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
 </section>
 
 <!-- FIM NOVO CARROSSEL -->
+        <section id="presentes" class="presentes-editorial reveal-section">
+            <div class="presentes-editorial__imagem">
+                <img src="../assets/images/products/product-caixa-quarteto.webp" alt="Caixa Quarteto Velle com quatro brigadeiros artesanais" width="1000" height="1000" loading="lazy">
+            </div>
+            <div class="presentes-editorial__conteudo">
+                <span class="section-kicker">Presentes Velle</span>
+                <h2>Um gesto à altura de quem recebe.</h2>
+                <p>Seleções montadas com cuidado, sabores memoráveis e uma apresentação que torna o momento especial antes mesmo da primeira mordida.</p>
+                <a class="button button--outline" href="#vitrine">Descobrir presentes</a>
+            </div>
+        </section>
+
         <section id="vitrine" class="grid-chocolates">
             <div class="vitrine-intro">
                 <p class="vitrine-intro__kicker">Chocolate</p>
@@ -384,10 +369,13 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
             </div>
 
             <div class="vitrine-toolbar" aria-label="Controles da vitrine">
-                <div class="vitrine-toolbar__sort" aria-label="Ordenar produtos">
+                <details class="vitrine-toolbar__sort" aria-label="Ordenar produtos">
+                    <summary>Ordenar produtos
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
+                    </summary>
                     <button class="vitrine-toolbar__button ativo" type="button" data-vitrine-sort="recommended" aria-pressed="true">Recomendados</button>
                     <button class="vitrine-toolbar__button" type="button" data-vitrine-sort="price-asc" aria-pressed="false">Preço: menor para maior</button>
-                </div>
+                </details>
                 <div class="vitrine-toolbar__lado">
                     <p id="vitrine-count" class="vitrine-toolbar__count" aria-live="polite">Exibindo: 0 / 0</p>
                     <div class="vitrine-setas" aria-label="Navegar produtos">
@@ -407,10 +395,36 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
             <div id="filtros-categoria" class="filtros-categoria" aria-label="Filtrar produtos por categoria"></div>
             <div id="container-cards" class="container"></div>
         </section>
+
+        <section class="manifesto reveal-section" aria-label="Essência Velle Dulcis">
+            <p class="section-kicker">Nossa essência</p>
+            <h2>Do detalhe nasce o inesquecível.</h2>
+            <p>Selecionamos cada combinação para equilibrar textura, aroma e delicadeza. Porque luxo, para nós, é transformar cuidado em sabor.</p>
+            <a href="historia.html">Conheça nossa história <span aria-hidden="true">→</span></a>
+        </section>
+
+        <section class="service-notes" aria-label="Diferenciais Velle Dulcis">
+            <article><span>01</span><div><h3>Feito com cuidado</h3><p>Produção artesanal em pequenos lotes.</p></div></article>
+            <article><span>02</span><div><h3>Presente impecável</h3><p>Embalagens preparadas para surpreender.</p></div></article>
+            <article><span>03</span><div><h3>Entrega segura</h3><p>Seu pedido protegido até chegar a você.</p></div></article>
+        </section>
     </main>
 
-    <footer class="rodape-site">
+    <footer id="contato" class="rodape-site">
         <div class="rodape-site__container">
+            <div class="rodape-site__newsletter">
+                <div>
+                    <span class="section-kicker">Cartas Velle</span>
+                    <h2>Novidades para saborear sem pressa.</h2>
+                </div>
+                <form class="newsletter-form" action="#" method="post">
+                    <label class="sr-only" for="newsletter-email">Seu melhor e-mail</label>
+                    <input id="newsletter-email" type="email" placeholder="Seu melhor e-mail" autocomplete="email" required>
+                    <button type="submit" aria-label="Assinar novidades">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+                    </button>
+                </form>
+            </div>
             <div class="rodape-site__grid">
                 <section class="rodape-site__coluna">
                     <h3>Shop</h3>
@@ -453,7 +467,7 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
                             </svg>
                         </a>
                         <span class="rodape-site__pix" aria-label="Pix" title="Pix">
-                            <img src="../assets/img/logo-pix-icone-1024.png" alt="Pix">
+                            <img src="../assets/images/ui/pix.png" alt="Pix" width="1024" height="1024" loading="lazy">
                         </span>
                     </div>
                 </section>
@@ -530,8 +544,10 @@ $rotuloConta = $usuarioAutenticado ? "" : "Entre ou cadastre-se";
             mensagemBoasVindas: <?php echo json_encode($mensagemBoasVindas, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
         };
     </script>
-    <script src="../assets/js/products-data.js?v=20260513-1"></script>
-    <script src="../assets/js/script.js?v=20260602-2"></script>
+    <script src="../assets/js/products-data.js?v=20260731-2"></script>
+    <script src="../assets/js/script.js?v=20260731-2"></script>
+    <script src="../assets/js/carousel.js?v=20260731-2"></script>
+    <script src="../assets/js/premium-home.js?v=20260731-2"></script>
 
 </body>
 </html>

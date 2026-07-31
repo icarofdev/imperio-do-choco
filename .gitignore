@@ -16,3 +16,4 @@ vendor/
 *.log
 logs/
 .runtime/
+backups/
