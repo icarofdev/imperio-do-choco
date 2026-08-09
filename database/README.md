@@ -1,35 +1,39 @@
 # Banco de dados
 
-O projeto agora usa migracoes versionadas em `database/migrate.php`.
+O schema do projeto é controlado por migrações versionadas em `database/migrate.php`.
 
 ## Fluxo recomendado
 
 1. Crie o banco `imperio_do_choco`.
-2. Crie um usuario dedicado da aplicacao com acesso apenas a esse banco.
-3. Configure as credenciais em `.env`.
-4. Execute as migracoes:
+2. Crie um usuário dedicado da aplicação com acesso apenas a esse banco.
+3. Copie `.env.example` para `.env` e configure as credenciais locais.
+4. Execute as migrações:
 
 ```powershell
 C:\xampp\php\php.exe database\migrate.php
 ```
 
-5. Se quiser o usuario administrador inicial, execute depois:
+5. Se precisar de um administrador, use o script CLI sem versionar e-mail ou senha:
 
-```sql
-SOURCE database/criar-admin.sql;
+```powershell
+$env:ADMIN_NAME="Administrador local"
+$env:ADMIN_EMAIL="seu-email@exemplo.com"
+$env:ADMIN_PASSWORD="uma-senha-local-com-12-ou-mais-caracteres"
+C:\xampp\php\php.exe scripts\criar-admin.php
+Remove-Item Env:ADMIN_NAME, Env:ADMIN_EMAIL, Env:ADMIN_PASSWORD
 ```
 
-## O que as migracoes fazem
+O script cria ou atualiza o usuário informado e armazena somente o hash produzido por `password_hash`.
 
-- criam e versionam o schema em `schema_migrations`
-- endurecem `usuarios`, `produtos` e `carrinho_itens`
-- criam `enderecos`, `pedidos`, `pedido_itens` e `estoque_movimentacoes`
-- adicionam indices para busca e ordenacao
-- criam chaves estrangeiras do carrinho para usuarios e produtos
-- adicionam `produto_id` ao carrinho mantendo snapshot textual
-- padronizam `ref`, `slug` e `peso_gramas`
-- aplicam soft delete em produtos com `ativo` e `deleted_at`
+## O que as migrações fazem
 
-## Observacao
+- criam e versionam o schema em `schema_migrations`;
+- estruturam `usuarios`, `produtos` e `carrinho_itens`;
+- criam `enderecos`, `pedidos`, `pedido_itens` e `estoque_movimentacoes`;
+- adicionam índices, restrições e chaves estrangeiras;
+- adicionam `produto_id` ao carrinho mantendo um snapshot textual;
+- padronizam `ref`, `slug` e `peso_gramas`;
+- aplicam soft delete em produtos;
+- criam a estrutura de recuperação de senha.
 
-As rotas PHP nao criam mais tabelas automaticamente. Se o schema estiver ausente, a aplicacao retorna erro orientando a rodar as migracoes.
+As rotas PHP não criam tabelas automaticamente. Se o schema estiver ausente, a aplicação orienta a executar as migrações.

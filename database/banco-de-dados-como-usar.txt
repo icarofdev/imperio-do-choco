@@ -1,40 +1,13 @@
-----------COMO CONFIGURAR O BANCO DE DADOS----------
+CONFIGURAÇÃO LOCAL DO BANCO
 
-1. Instale o XAMPP.
+1. Crie o banco imperio_do_choco no MySQL.
+2. Copie .env.example para .env.
+3. Configure DB_HOST, DB_PORT, DB_NAME, DB_USER e DB_PASS.
+4. Execute:
+   C:\xampp\php\php.exe database\migrate.php
+5. Para criar um administrador sem publicar credenciais, defina temporariamente
+   ADMIN_NAME, ADMIN_EMAIL e ADMIN_PASSWORD no terminal e execute:
+   C:\xampp\php\php.exe scripts\criar-admin.php
+6. Remova essas três variáveis do terminal após o comando.
 
-2. Coloque a pasta do projeto dentro de `C:\xampp\htdocs`.
-
-3. Inicie `Apache` e `MySQL` no painel do XAMPP.
-
-4. Crie o banco `imperio_do_choco` no phpMyAdmin.
-
-5. Copie `.env.example` para `.env` e ajuste as credenciais do banco.
-   Nesta instalacao XAMPP, o MariaDB usa a porta `3307` porque a `3306` ja esta ocupada.
-   Recomendacao senior: use um usuario dedicado da aplicacao, nao `root`.
-
-6. Rode as migracoes:
-   `C:\xampp\php\php.exe database\migrate.php`
-
-7. Se quiser criar o administrador inicial, execute o arquivo `database/criar-admin.sql`.
-
-8. Teste a conexao:
-   `C:\xampp\php\php.exe app\teste-banco.php`
-
-9. Login administrativo:
-   Email: `admin@imperiodochocolate.com`
-   Senha: use a senha definida no hash de `database/criar-admin.sql` e troque apos o primeiro acesso.
-
-10. Fluxo principal:
-   `http://localhost/imperio-do-choco/public/login.php`
-   depois
-   `http://localhost/imperio-do-choco/public/index.php`
-
-----------OBSERVACOES IMPORTANTES----------
-
-- As tabelas nao sao mais criadas automaticamente pelas rotas PHP.
-- Se o schema nao existir, a aplicacao vai pedir para executar `database/migrate.php`.
-- O carrinho agora salva `produto_id` quando houver produto do banco e ainda preserva snapshot de nome, preco e imagem.
-- O cadastro de usuarios agora depende da chave unica do banco para evitar corrida de concorrencia.
-- O banco agora inclui `enderecos`, `pedidos`, `pedido_itens` e `estoque_movimentacoes`.
-- Produtos removidos no painel agora usam soft delete: saem da vitrine sem perder historico.
-- A recuperacao de senha usa a tabela `recuperacoes_senha`. Para envio real, configure `EMAIL_PROVIDER` como `brevo` ou `smtp` no `.env`.
+Não há e-mail, senha ou hash administrativo padrão no repositório.
