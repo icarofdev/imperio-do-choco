@@ -1,0 +1,10 @@
+.git/
+.env
+.env.*
+!.env.example
+.runtime/
+backups/
+outputs/
+node_modules/
+vendor/
+*.log

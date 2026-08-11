@@ -12,8 +12,12 @@ desktop.ini
 
 node_modules/
 vendor/
+__pycache__/
+*.py[cod]
 
 *.log
 logs/
 .runtime/
 backups/
+.vercel/
+public/assets/

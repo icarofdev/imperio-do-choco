@@ -9,6 +9,7 @@ $port = $databaseConfig["port"];
 $dbname = $databaseConfig["dbname"];
 $user = $databaseConfig["user"];
 $pass = $databaseConfig["pass"];
+$charset = $databaseConfig["charset"];
 $appEnv = strtolower(lerVariavelAmbiente("APP_ENV", "development") ?? "development");
 $pdo = null;
 $databaseConnectionError = "";
@@ -18,28 +19,32 @@ if (in_array($appEnv, ["prod", "production"], true) && ($user === "root" || $pas
     $databaseConnectionError = "Configuracao de banco insegura para producao.";
 } else {
     try {
+        $pdoOptions = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::ATTR_TIMEOUT => 5,
+        ];
+        $sslCa = prepararCertificadoCaBanco();
+
+        if ($sslCa !== null && defined("PDO::MYSQL_ATTR_SSL_CA")) {
+            $pdoOptions[PDO::MYSQL_ATTR_SSL_CA] = $sslCa;
+        }
+
+        if ($sslCa !== null && defined("PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT")) {
+            $pdoOptions[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
+        }
+
         $pdo = new PDO(
-            "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4",
+            "mysql:host={$host};port={$port};dbname={$dbname};charset={$charset}",
             $user,
             $pass,
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-                PDO::ATTR_TIMEOUT => 5,
-            ]
+            $pdoOptions
         );
     } catch (PDOException $exception) {
         $databaseConnectionError = "Erro na conexao com o banco de dados.";
         $databaseConnectionErrorCode = (string) $exception->getCode();
-        error_log(sprintf(
-            "[Velle Dulcis][database] Falha PDO em %s:%s/%s (%s): %s",
-            $host,
-            $port,
-            $dbname,
-            $databaseConnectionErrorCode !== "" ? $databaseConnectionErrorCode : "sem codigo",
-            $exception->getMessage()
-        ));
+        registrarErroConexaoBanco($exception, $appEnv);
     }
 }
 
@@ -104,13 +109,71 @@ function lerVariavelAmbiente(string $nome, ?string $padrao = null): ?string
 
 function obterConfiguracaoBanco(): array
 {
+    $charset = lerVariavelAmbiente("DB_CHARSET", "utf8mb4") ?? "utf8mb4";
+
+    if (preg_match('/^[A-Za-z0-9_]+$/', $charset) !== 1) {
+        $charset = "utf8mb4";
+    }
+
     return [
         "host" => lerVariavelAmbiente("DB_HOST", "127.0.0.1"),
         "port" => lerVariavelAmbiente("DB_PORT", "3307"),
-        "dbname" => lerVariavelAmbiente("DB_NAME", "imperio_do_choco"),
-        "user" => lerVariavelAmbiente("DB_USER", "root"),
-        "pass" => lerVariavelAmbiente("DB_PASS", ""),
+        "dbname" => lerVariavelAmbiente("DB_DATABASE", lerVariavelAmbiente("DB_NAME", "imperio_do_choco")),
+        "user" => lerVariavelAmbiente("DB_USERNAME", lerVariavelAmbiente("DB_USER", "root")),
+        "pass" => lerVariavelAmbiente("DB_PASSWORD", lerVariavelAmbiente("DB_PASS", "")),
+        "charset" => $charset,
     ];
+}
+
+function prepararCertificadoCaBanco(): ?string
+{
+    $caminho = lerVariavelAmbiente("DB_SSL_CA");
+
+    if ($caminho !== null) {
+        $caminho = trim($caminho);
+
+        if ($caminho !== "" && is_file($caminho)) {
+            return realpath($caminho) ?: $caminho;
+        }
+    }
+
+    $certificadoBase64 = lerVariavelAmbiente("DB_SSL_CA_BASE64");
+
+    if ($certificadoBase64 === null) {
+        return null;
+    }
+
+    $certificado = base64_decode(preg_replace('/\s+/', '', $certificadoBase64) ?? "", true);
+
+    if (!is_string($certificado) || !str_contains($certificado, "BEGIN CERTIFICATE")) {
+        throw new RuntimeException("O certificado CA do banco esta invalido.");
+    }
+
+    $arquivo = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR)
+        . DIRECTORY_SEPARATOR
+        . "velle-dulcis-db-ca-"
+        . substr(hash("sha256", $certificado), 0, 16)
+        . ".pem";
+
+    if (!is_file($arquivo) && file_put_contents($arquivo, $certificado, LOCK_EX) === false) {
+        throw new RuntimeException("Nao foi possivel preparar o certificado CA do banco.");
+    }
+
+    return $arquivo;
+}
+
+function registrarErroConexaoBanco(PDOException $exception, string $appEnv): void
+{
+    $codigo = (string) $exception->getCode();
+    $mensagem = in_array($appEnv, ["prod", "production"], true)
+        ? "detalhes suprimidos em producao"
+        : preg_replace('/[\r\n]+/', ' ', $exception->getMessage());
+
+    error_log(sprintf(
+        "[Velle Dulcis][database] Falha PDO (codigo=%s, %s)",
+        $codigo !== "" ? $codigo : "sem-codigo",
+        $mensagem !== "" ? $mensagem : "sem-detalhes"
+    ));
 }
 
 function bancoDeDadosDisponivel($pdo): bool
@@ -180,4 +243,9 @@ function schemaComercialDisponivel(PDO $pdo): bool
         $pdo,
         ["usuarios", "produtos", "enderecos", "pedidos", "pedido_itens", "estoque_movimentacoes"]
     );
+}
+
+function schemaSessoesDisponivel(PDO $pdo): bool
+{
+    return tabelasBancoDisponiveis($pdo, ["sessoes"]);
 }

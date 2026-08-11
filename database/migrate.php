@@ -51,6 +51,13 @@ $migracoes = [
             migrarRecuperacaoSenha($pdo);
         },
     ],
+    [
+        "id" => "006_sessoes_schema",
+        "descricao" => "Cria sessoes persistentes para ambientes serverless",
+        "executar" => static function (PDO $pdo): void {
+            migrarSessoes($pdo);
+        },
+    ],
 ];
 
 foreach ($migracoes as $migracao) {
@@ -85,6 +92,22 @@ function garantirTabelaMigracoes(PDO $pdo): void
             descricao VARCHAR(255) NOT NULL,
             aplicada_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+    );
+}
+
+function migrarSessoes(PDO $pdo): void
+{
+    $pdo->exec(
+        "CREATE TABLE IF NOT EXISTS sessoes (
+            id VARCHAR(128) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            dados MEDIUMBLOB NOT NULL,
+            ip VARCHAR(45) DEFAULT NULL,
+            user_agent VARCHAR(255) DEFAULT NULL,
+            expira_em INT UNSIGNED NOT NULL,
+            atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            INDEX sessoes_expira_idx (expira_em)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
     );
 }
