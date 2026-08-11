@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/login.css?v=20260527-1">
-    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-3">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-4">
     <link rel="stylesheet" href="../assets/css/registration.css?v=20260731-1">
     <script src="../assets/js/theme.js?v=20260731-3" defer></script>
     <script src="../assets/js/registration.js?v=20260731-1" defer></script>

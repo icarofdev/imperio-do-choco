@@ -540,10 +540,10 @@ html[data-theme="dark"] body.account-page {
 }
 
 html[data-theme="dark"] .pagina-principal {
-    --primary: var(--color-text-primary);
-    --dark: var(--color-text-primary);
+    --primary: #64120C;
+    --dark: #211411;
     --gold: var(--color-accent);
-    --bg: var(--color-background);
+    --bg: #F2EDE7;
     --surface: var(--color-surface);
     --surface-strong: var(--color-surface-soft);
     --light-panel: var(--color-surface);
