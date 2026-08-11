@@ -13,8 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const AUTOPLAY_DELAY = 5200;
+    const RESUME_DELAY = 4200;
+    const SWIPE_THRESHOLD = 46;
     let activeIndex = 0;
     let autoplayTimer = null;
+    let resumeTimer = null;
+    let pointerStartX = null;
+    let pointerId = null;
+    let hovered = false;
+    let focused = false;
+    let interacting = false;
 
     function render() {
         const leftIndex = (activeIndex - 1 + slides.length) % slides.length;
@@ -26,17 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (index === activeIndex) {
                 slide.classList.add("active");
                 slide.setAttribute("aria-hidden", "false");
-                return;
-            }
-
-            slide.setAttribute("aria-hidden", "true");
-
-            if (index === leftIndex) {
-                slide.classList.add("left");
-            } else if (index === rightIndex) {
-                slide.classList.add("right");
             } else {
-                slide.classList.add("hidden");
+                slide.setAttribute("aria-hidden", "true");
+                slide.classList.add(index === leftIndex ? "left" : index === rightIndex ? "right" : "hidden");
             }
         });
     }
@@ -51,47 +53,120 @@ document.addEventListener("DOMContentLoaded", () => {
         autoplayTimer = null;
     }
 
+    function canAutoplay() {
+        return !reducedMotion.matches && !document.hidden && !hovered && !focused && !interacting;
+    }
+
     function startAutoplay() {
         stopAutoplay();
 
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        if (canAutoplay()) {
+            autoplayTimer = window.setInterval(() => goTo(activeIndex + 1), AUTOPLAY_DELAY);
+        }
+    }
+
+    function scheduleResume() {
+        stopAutoplay();
+        window.clearTimeout(resumeTimer);
+        resumeTimer = window.setTimeout(startAutoplay, RESUME_DELAY);
+    }
+
+    function registerInteraction(callback) {
+        stopAutoplay();
+        callback();
+        scheduleResume();
+    }
+
+    nextButton.addEventListener("click", () => registerInteraction(() => goTo(activeIndex + 1)));
+    previousButton.addEventListener("click", () => registerInteraction(() => goTo(activeIndex - 1)));
+
+    carousel.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
             return;
         }
 
-        autoplayTimer = window.setInterval(() => goTo(activeIndex + 1), 5200);
-    }
-
-    nextButton.addEventListener("click", () => {
-        goTo(activeIndex + 1);
-        startAutoplay();
+        event.preventDefault();
+        registerInteraction(() => goTo(activeIndex + (event.key === "ArrowLeft" ? -1 : 1)));
     });
 
-    previousButton.addEventListener("click", () => {
-        goTo(activeIndex - 1);
-        startAutoplay();
+    carousel.addEventListener("mouseenter", () => {
+        hovered = true;
+        stopAutoplay();
+        window.clearTimeout(resumeTimer);
     });
 
-    carousel.addEventListener("keydown", (event) => {
-        if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            goTo(activeIndex - 1);
+    carousel.addEventListener("mouseleave", () => {
+        hovered = false;
+        scheduleResume();
+    });
+
+    carousel.addEventListener("focusin", () => {
+        focused = true;
+        stopAutoplay();
+        window.clearTimeout(resumeTimer);
+    });
+
+    carousel.addEventListener("focusout", (event) => {
+        if (carousel.contains(event.relatedTarget)) {
+            return;
         }
 
-        if (event.key === "ArrowRight") {
-            event.preventDefault();
-            goTo(activeIndex + 1);
-        }
+        focused = false;
+        scheduleResume();
     });
 
-    carousel.addEventListener("mouseenter", stopAutoplay);
-    carousel.addEventListener("mouseleave", startAutoplay);
-    carousel.addEventListener("focusin", stopAutoplay);
-    carousel.addEventListener("focusout", startAutoplay);
+    carousel.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse" && event.button !== 0) {
+            return;
+        }
+
+        interacting = true;
+        pointerId = event.pointerId;
+        pointerStartX = event.clientX;
+        stopAutoplay();
+        window.clearTimeout(resumeTimer);
+        carousel.setPointerCapture?.(event.pointerId);
+    });
+
+    carousel.addEventListener("pointerup", (event) => {
+        if (pointerId !== event.pointerId || pointerStartX === null) {
+            return;
+        }
+
+        const distance = event.clientX - pointerStartX;
+        interacting = false;
+        pointerId = null;
+        pointerStartX = null;
+
+        if (Math.abs(distance) >= SWIPE_THRESHOLD) {
+            goTo(activeIndex + (distance < 0 ? 1 : -1));
+        }
+
+        scheduleResume();
+    });
+
+    carousel.addEventListener("pointercancel", () => {
+        interacting = false;
+        pointerId = null;
+        pointerStartX = null;
+        scheduleResume();
+    });
+
     document.addEventListener("visibilitychange", () => {
         if (document.hidden) {
             stopAutoplay();
+            return;
+        }
+
+        scheduleResume();
+    });
+
+    reducedMotion.addEventListener?.("change", () => {
+        if (reducedMotion.matches) {
+            stopAutoplay();
+            window.clearTimeout(resumeTimer);
         } else {
-            startAutoplay();
+            scheduleResume();
         }
     });
 

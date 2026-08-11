@@ -107,6 +107,11 @@ function atualizarEstadoHeader() {
         return;
     }
 
+    if (headerSite.dataset.headerSurface === "true") {
+        headerSite.classList.add("topo-site--compact");
+        return;
+    }
+
     const headerCompacto = headerSite.classList.contains("topo-site--compact");
     const scrollAtual = window.scrollY;
 
@@ -712,18 +717,6 @@ function aplicarFallbackImagensProdutos(raiz) {
     raiz.querySelectorAll("img").forEach(aplicarFallbackImagemProduto);
 }
 
-function criarResumoCard(produto) {
-    const categoria = String(produto.categoria || "Chocolate").trim();
-    const peso = String(produto.peso || "").trim();
-    return [categoria, peso].filter(Boolean).join(" · ");
-}
-
-function obterTotalAvaliacoes(produto, index) {
-    const chave = String(produto.slug || produto.nome || index);
-    const somaCaracteres = [...chave].reduce((total, caractere) => total + caractere.charCodeAt(0), 0);
-    return 24 + (somaCaracteres % 38);
-}
-
 function configurarArrasteVitrine() {
     if (!container) {
         return;
@@ -1033,46 +1026,16 @@ function renderizarChocolates(chocolates) {
     }
 
     chocolatesOrdenados.forEach((choc, index) => {
-        const quantidade = obterQuantidadeNoCarrinho(choc.nome);
-        const card = document.createElement("article");
-        const descricao = criarResumoCard(choc);
-        const totalAvaliacoes = obterTotalAvaliacoes(choc, index);
-        card.className = "card";
-        card.style.setProperty("--card-stagger-index", String(index % 12));
-        card.innerHTML = `
-            <a class="card__imagem-link" href="produto.html?id=${encodeURIComponent(choc.slug)}">
-                <div class="card__imagem-box">
-                    <img src="${escapeHtml(choc.imagem)}" alt="${escapeHtml(choc.nome)}" loading="lazy" decoding="async">
-                </div>
-            </a>
-            <div class="card__conteudo">
-                <a class="card__link" href="produto.html?id=${encodeURIComponent(choc.slug)}">
-                    <p class="card__descricao">${escapeHtml(descricao)}</p>
-                    <div class="card__linha">
-                        <h3>${escapeHtml(choc.nome)}</h3>
-                        <p class="card__preco">${formatarPreco(choc.preco)}</p>
-                    </div>
-                    <div class="card__rating" aria-label="Avaliacao maxima com ${totalAvaliacoes} avaliacoes">
-                        <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                        <span>${totalAvaliacoes}</span>
-                    </div>
-                    <span class="card__selo">${escapeHtml(choc.destaque)}</span>
-                    <span class="card__quantidade-info">${quantidade > 0 ? `${quantidade} na sacola` : "Disponivel agora"}</span>
-                </a>
-            </div>
-        `;
-
-        const botaoAdicionar = document.createElement("button");
-        botaoAdicionar.type = "button";
-        botaoAdicionar.className = "card__cta";
-        botaoAdicionar.textContent = "Adicionar";
-        botaoAdicionar.setAttribute("aria-label", `Adicionar ${choc.nome} ao carrinho`);
-        botaoAdicionar.addEventListener("click", (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            adicionarAoCarrinho(choc.nome, choc.preco, choc.imagem);
+        const card = window.VelleProductCard?.create(choc, {
+            index,
+            quantity: obterQuantidadeNoCarrinho(choc.nome),
+            onAdd: (produto) => adicionarAoCarrinho(produto.nome, produto.preco, produto.imagem),
         });
-        card.querySelector(".card__conteudo").appendChild(botaoAdicionar);
+
+        if (!card) {
+            return;
+        }
+
         aplicarFallbackImagensProdutos(card);
         container.appendChild(card);
     });
@@ -1133,7 +1096,10 @@ window.abrirVitrinePrincipal = function () {
 
     if (vitrine) {
         vitrine.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
     }
+
+    window.location.href = `${rotaHomeAtual}#vitrine`;
 };
 
 window.adicionarSugestaoCarrinho = function (slugProduto, botao) {

@@ -52,7 +52,7 @@ function normalizarChocolate(chocolate, index = 0) {
         preco,
         imagem: imagemPrincipal,
         imagens: imagens.length > 0 ? imagens : [imagemPrincipal].filter(Boolean),
-        descricao: chocolate.descricao || "Um chocolate especial preparado para transformar qualquer momento em algo memoravel.",
+        descricao: chocolate.descricao || "",
         categoria: chocolate.categoria || "Chocolate",
         tipo: chocolate.tipo || chocolate.categoria || "Chocolate",
         peso: chocolate.peso || "",
@@ -61,7 +61,7 @@ function normalizarChocolate(chocolate, index = 0) {
             && Number.isFinite(Number(chocolate.peso_gramas))
             ? Math.max(0, Number(chocolate.peso_gramas))
             : null,
-        destaque: chocolate.destaque || "Selecao da casa",
+        destaque: chocolate.destaque || "",
         estoque_quantidade: Number.isFinite(Number(chocolate.estoque_quantidade))
             ? Math.max(0, Number(chocolate.estoque_quantidade))
             : 0,

@@ -49,18 +49,4 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    const newsletterForm = document.querySelector(".newsletter-form");
-
-    newsletterForm?.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const input = newsletterForm.querySelector("input");
-
-        if (!input?.checkValidity()) {
-            input?.reportValidity();
-            return;
-        }
-
-        input.value = "";
-        input.placeholder = "Cadastro realizado com carinho";
-    });
 });
