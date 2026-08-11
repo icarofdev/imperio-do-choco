@@ -23,22 +23,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const sortDropdown = document.querySelector(".vitrine-toolbar__sort");
-    const sortSummary = sortDropdown?.querySelector("summary");
+    const sortLabel = sortDropdown?.querySelector("[data-vitrine-sort-label]");
     const sortButtons = [...document.querySelectorAll("[data-vitrine-sort]")];
+
+    function updateSortLabel(button) {
+        if (!sortLabel || !button) {
+            return;
+        }
+
+        sortLabel.textContent = button.dataset.vitrineSort === "price-asc"
+            ? "Menor preço"
+            : "Recomendados";
+    }
+
+    updateSortLabel(sortButtons.find((button) => button.classList.contains("ativo")) || sortButtons[0]);
 
     sortButtons.forEach((button) => {
         button.addEventListener("click", () => {
-            if (sortSummary) {
-                const label = button.dataset.vitrineSort === "price-asc"
-                    ? "Menor preço"
-                    : "Recomendados";
-                const textNode = [...sortSummary.childNodes].find((node) => node.nodeType === Node.TEXT_NODE);
-
-                if (textNode) {
-                    textNode.textContent = `${label} `;
-                }
-            }
-
+            updateSortLabel(button);
             sortDropdown?.removeAttribute("open");
         });
     });

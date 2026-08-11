@@ -131,7 +131,7 @@
 
         return new Promise((resolve, reject) => {
             const script = document.createElement("script");
-            script.src = "../assets/js/script.js?v=20260811-1";
+            script.src = "../assets/js/script.js?v=20260811-3";
             script.onload = resolve;
             script.onerror = () => reject(new Error("Não foi possível carregar os recursos compartilhados da loja."));
             document.body.appendChild(script);

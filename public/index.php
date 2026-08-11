@@ -32,9 +32,9 @@ $destinoConta = $usuarioAutenticado
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css?v=20260811-1">
-    <link rel="stylesheet" href="../assets/css/premium-home.css?v=20260811-1">
-    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-1">
+    <link rel="stylesheet" href="../assets/css/style.css?v=20260811-3">
+    <link rel="stylesheet" href="../assets/css/premium-home.css?v=20260811-3">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-3">
     <script>
         window.APP_CSRF_TOKEN = <?php echo json_encode(obterTokenCsrf(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
         window.APP_AUTH = {
@@ -45,7 +45,7 @@ $destinoConta = $usuarioAutenticado
             mensagemBoasVindas: <?php echo json_encode($mensagemBoasVindas, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
         };
     </script>
-    <script src="../assets/js/site-components.js?v=20260811-1"></script>
+    <script src="../assets/js/site-components.js?v=20260811-3"></script>
     <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
 
@@ -148,11 +148,13 @@ $destinoConta = $usuarioAutenticado
 
             <div class="vitrine-toolbar" aria-label="Controles da vitrine">
                 <details class="vitrine-toolbar__sort" aria-label="Ordenar produtos">
-                    <summary>Ordenar produtos
+                    <summary><span data-vitrine-sort-label>Ordenar produtos</span>
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>
                     </summary>
-                    <button class="vitrine-toolbar__button ativo" type="button" data-vitrine-sort="recommended" aria-pressed="true">Recomendados</button>
-                    <button class="vitrine-toolbar__button" type="button" data-vitrine-sort="price-asc" aria-pressed="false">Preço: menor para maior</button>
+                    <div class="vitrine-toolbar__menu" role="group" aria-label="Opções de ordenação">
+                        <button class="vitrine-toolbar__button ativo" type="button" data-vitrine-sort="recommended" aria-pressed="true">Recomendados</button>
+                        <button class="vitrine-toolbar__button" type="button" data-vitrine-sort="price-asc" aria-pressed="false">Preço: menor para maior</button>
+                    </div>
                 </details>
                 <div class="vitrine-toolbar__lado">
                     <p id="vitrine-count" class="vitrine-toolbar__count" aria-live="polite">Exibindo: 0 / 0</p>
@@ -191,11 +193,11 @@ $destinoConta = $usuarioAutenticado
         });
     </script>
 
-    <script src="../assets/js/products-data.js?v=20260811-1"></script>
-    <script src="../assets/js/product-card.js?v=20260811-1"></script>
-    <script src="../assets/js/script.js?v=20260811-1"></script>
-    <script src="../assets/js/carousel.js?v=20260811-1"></script>
-    <script src="../assets/js/premium-home.js?v=20260811-1"></script>
+    <script src="../assets/js/products-data.js?v=20260811-2"></script>
+    <script src="../assets/js/product-card.js?v=20260811-3"></script>
+    <script src="../assets/js/script.js?v=20260811-3"></script>
+    <script src="../assets/js/carousel.js?v=20260811-2"></script>
+    <script src="../assets/js/premium-home.js?v=20260811-3"></script>
 
 </body>
 </html>

@@ -1,4 +1,9 @@
 (function () {
+    const currencyFormatter = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+    });
+
     function escapeHtml(value) {
         return String(value ?? "")
             .replace(/&/g, "&amp;")
@@ -9,7 +14,7 @@
     }
 
     function formatPrice(value) {
-        return `R$ ${Number(value || 0).toFixed(2).replace(".", ",")}`;
+        return currencyFormatter.format(Number(value || 0));
     }
 
     function summary(product) {

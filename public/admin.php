@@ -26,7 +26,7 @@ $nomeUsuario = (string) ($_SESSION["usuario_nome"] ?? "Administrador");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../assets/js/theme-init.js?v=20260731-3"></script>
     <link rel="stylesheet" href="../assets/css/admin.css?v=20260527-1">
-    <link rel="stylesheet" href="../assets/css/theme.css?v=20260731-3">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-3">
     <script src="../assets/js/theme.js?v=20260731-3" defer></script>
     <title>Admin | Velle Dulcis</title>
 </head>

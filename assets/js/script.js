@@ -6,6 +6,7 @@ const overlayCarrinho = document.getElementById("overlay-carrinho");
 const fecharCarrinho = document.getElementById("fechar-carrinho");
 const tituloCarrinho = document.querySelector(".carrinho-topo h3");
 const resumoCarrinho = document.querySelector(".carrinho-resumo");
+const carrinhoDetalhes = document.getElementById("carrinho-detalhes");
 const subtotalPreco = document.getElementById("subtotal-preco");
 const totalPrecoElement = document.getElementById("total-preco");
 const abrirPesquisa = document.getElementById("abrir-pesquisa");
@@ -20,8 +21,8 @@ const vitrineSortButtons = document.querySelectorAll("[data-vitrine-sort]");
 const vitrineScrollButtons = document.querySelectorAll("[data-vitrine-scroll]");
 const instagramLinks = document.querySelectorAll('a[aria-label="Instagram"]');
 const painelPesquisa = document.getElementById("painel-pesquisa");
-const listaSugestoes = document.getElementById("lista-sugestoes");
 const listaResultadosPesquisa = document.getElementById("lista-resultados-pesquisa");
+const resultadoPesquisaContagem = document.getElementById("resultado-pesquisa-contagem");
 const listaAtalhosPesquisa = document.getElementById("lista-atalhos-pesquisa");
 const filtrosCategoria = document.getElementById("filtros-categoria");
 const popupCarrinho = document.getElementById("popup-carrinho");
@@ -178,8 +179,20 @@ window.addEventListener("resize", () => {
     reposicionarPopupCarrinhoAtivo();
 });
 window.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && menuMobileAberto()) {
+    if (event.key !== "Escape") {
+        return;
+    }
+
+    if (menuMobileAberto()) {
         fecharMenuMobile();
+    }
+
+    if (overlayPesquisa && !overlayPesquisa.classList.contains("oculto")) {
+        fecharOverlayPesquisa();
+    }
+
+    if (carrinhoLateral?.classList.contains("ativo")) {
+        fecharPainelCarrinho();
     }
 });
 
@@ -200,8 +213,14 @@ let categoriaAtiva = "";
 let vitrineArrastando = false;
 let vitrineArrasteInicioX = 0;
 let vitrineScrollInicio = 0;
+let focoAntesPesquisa = null;
+let focoAntesCarrinho = null;
 
 const DURACAO_POPUP_CARRINHO = 4000;
+const formatadorMoeda = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+});
 
 function obterRotasApp() {
     return {
@@ -887,7 +906,7 @@ function criarBotaoResultadoPesquisa(produto) {
     const botao = document.createElement("button");
     botao.type = "button";
     botao.className = "resultado-pesquisa__botao";
-    botao.textContent = "+";
+    botao.innerHTML = '<span aria-hidden="true">+</span> Adicionar';
     botao.setAttribute("aria-label", `Adicionar ${produto.nome} ao carrinho`);
     botao.addEventListener("click", () => {
         adicionarAoCarrinho(produto.nome, produto.preco, produto.imagem);
@@ -915,26 +934,30 @@ function criarItemPesquisa(produto) {
 }
 
 function atualizarPainelPesquisa(termoBusca, resultados = []) {
-    if (!listaSugestoes || !listaResultadosPesquisa) {
+    if (!listaResultadosPesquisa) {
         return;
     }
 
-    const sugestoes = (resultados.length > 0 ? resultados : listaChocolates).slice(0, 4);
-    listaSugestoes.innerHTML = "";
     listaResultadosPesquisa.innerHTML = "";
+    const produtosUnicos = [...new Map(
+        resultados.map((produto) => [produto.slug || produto.nome, produto])
+    ).values()];
 
-    sugestoes.forEach((produto) => {
-        listaSugestoes.appendChild(criarItemPesquisa(produto));
-    });
-
-    if (termoBusca && resultados.length === 0) {
+    if (termoBusca && produtosUnicos.length === 0) {
         listaResultadosPesquisa.innerHTML = '<p class="pesquisa-vazia">Nenhum chocolate encontrado.</p>';
+        if (resultadoPesquisaContagem) {
+            resultadoPesquisaContagem.textContent = "0 produtos";
+        }
         return;
     }
 
-    resultados.slice(0, 8).forEach((produto) => {
+    produtosUnicos.slice(0, 8).forEach((produto) => {
         listaResultadosPesquisa.appendChild(criarItemPesquisa(produto));
     });
+
+    if (resultadoPesquisaContagem) {
+        resultadoPesquisaContagem.textContent = `${produtosUnicos.length} ${produtosUnicos.length === 1 ? "produto" : "produtos"}`;
+    }
 }
 
 function renderizarAtalhosPesquisa() {
@@ -973,8 +996,10 @@ function abrirOverlayPesquisa() {
     }
 
     clearTimeout(timeoutFechamentoPesquisa);
+    focoAntesPesquisa = document.activeElement;
     overlayPesquisa.classList.remove("oculto");
     overlayPesquisa.classList.remove("overlay-pesquisa--visivel");
+    overlayPesquisa.setAttribute("aria-hidden", "false");
     document.body.classList.add("sem-rolagem");
     atualizarPainelPesquisa(normalizarTextoBusca(barraPesquisa.value), obterChocolatesVisiveisPelaBusca());
     requestAnimationFrame(() => {
@@ -989,6 +1014,7 @@ function fecharOverlayPesquisa() {
     }
 
     overlayPesquisa.classList.remove("overlay-pesquisa--visivel");
+    overlayPesquisa.setAttribute("aria-hidden", "true");
 
     clearTimeout(timeoutFechamentoPesquisa);
     timeoutFechamentoPesquisa = window.setTimeout(() => {
@@ -997,6 +1023,11 @@ function fecharOverlayPesquisa() {
 
     if (!carrinhoLateral.classList.contains("ativo")) {
         document.body.classList.remove("sem-rolagem");
+    }
+
+    if (focoAntesPesquisa instanceof HTMLElement) {
+        focoAntesPesquisa.focus();
+        focoAntesPesquisa = null;
     }
 }
 
@@ -1047,7 +1078,23 @@ function renderizarChocolates(chocolates) {
 }
 
 function formatarPreco(valor) {
-    return `R$ ${Number(valor || 0).toFixed(2).replace(".", ",")}`;
+    return formatadorMoeda.format(Number(valor || 0));
+}
+
+function calcularResumoCarrinho(itens = carrinho) {
+    const linhas = itens.map((item) => {
+        const precoUnitario = Number(item.preco || 0);
+        const quantidade = Math.max(1, Number.parseInt(item.qtd, 10) || 1);
+        const subtotal = Math.round(precoUnitario * quantidade * 100) / 100;
+
+        return { item, precoUnitario, quantidade, subtotal };
+    });
+
+    return {
+        linhas,
+        totalItens: linhas.reduce((soma, linha) => soma + linha.quantidade, 0),
+        subtotal: Math.round(linhas.reduce((soma, linha) => soma + linha.subtotal, 0) * 100) / 100,
+    };
 }
 
 function obterSugestoesCarrinhoVazio() {
@@ -1156,12 +1203,10 @@ window.adicionarAoCarrinho = function (nome, preco, imagem) {
 
 function atualizarCarrinho(devePersistir = true) {
     listaCarrinho.innerHTML = "";
-
-    let totalItens = 0;
-    let totalPreco = 0;
+    const resumo = calcularResumoCarrinho();
 
     if (tituloCarrinho) {
-        tituloCarrinho.textContent = `Minha sacola (${carrinho.reduce((soma, item) => soma + item.qtd, 0)})`;
+        tituloCarrinho.textContent = `Minha sacola (${resumo.totalItens})`;
     }
 
     if (carrinho.length === 0) {
@@ -1194,8 +1239,11 @@ function atualizarCarrinho(devePersistir = true) {
         aplicarFallbackImagensProdutos(listaCarrinho);
 
         qtdItens.textContent = "0";
-        subtotalPreco.textContent = "R$ 0,00";
-        totalPrecoElement.textContent = "R$ 0,00";
+        subtotalPreco.textContent = formatarPreco(0);
+        totalPrecoElement.textContent = formatarPreco(0);
+        if (carrinhoDetalhes) {
+            carrinhoDetalhes.innerHTML = "";
+        }
 
         if (resumoCarrinho) {
             resumoCarrinho.hidden = true;
@@ -1217,23 +1265,21 @@ function atualizarCarrinho(devePersistir = true) {
         resumoCarrinho.hidden = false;
     }
 
-    carrinho.forEach((item, index) => {
-        totalItens += item.qtd;
-        totalPreco += item.preco * item.qtd;
+    resumo.linhas.forEach(({ item, precoUnitario, quantidade }, index) => {
 
         const li = document.createElement("li");
         li.innerHTML = `
             <div class="item-carrinho">
-                <img class="item-carrinho__imagem" src="${item.imagem}" alt="${item.nome}">
+                <img class="item-carrinho__imagem" src="${escapeHtml(item.imagem)}" alt="${escapeHtml(item.nome)}">
 
                 <div class="item-carrinho__conteudo">
                     <div class="item-carrinho__topo">
                         <div class="item-carrinho__info">
-                            <strong>${item.nome}</strong>
-                            <span class="item-carrinho__preco">R$ ${(item.preco * item.qtd).toFixed(2).replace(".", ",")}</span>
+                            <strong>${escapeHtml(item.nome)}</strong>
+                            <span class="item-carrinho__preco">${formatarPreco(precoUnitario)} <small>por unidade</small></span>
                         </div>
 
-                        <button type="button" class="item-carrinho__remover-total" onclick="event.stopPropagation(); removerItemCompleto(${index}, this)" aria-label="Remover ${item.nome} do carrinho">
+                        <button type="button" class="item-carrinho__remover-total" onclick="event.stopPropagation(); removerItemCompleto(${index}, this)" aria-label="Remover ${escapeHtml(item.nome)} da sacola">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M4 7h16"></path>
                                 <path d="M9 7V5h6v2"></path>
@@ -1246,9 +1292,9 @@ function atualizarCarrinho(devePersistir = true) {
 
                     <div class="item-carrinho__rodape">
                         <div class="item-carrinho__acoes">
-                            <button type="button" onclick="event.stopPropagation(); removerItem(${index}, this)">-</button>
-                            <span>${item.qtd}</span>
-                            <button type="button" onclick="event.stopPropagation(); adicionarItem(${index})">+</button>
+                            <button type="button" onclick="event.stopPropagation(); removerItem(${index}, this)" aria-label="Diminuir quantidade de ${escapeHtml(item.nome)}">−</button>
+                            <span aria-label="Quantidade: ${quantidade}">${quantidade}</span>
+                            <button type="button" onclick="event.stopPropagation(); adicionarItem(${index})" aria-label="Aumentar quantidade de ${escapeHtml(item.nome)}">+</button>
                         </div>
                     </div>
                 </div>
@@ -1259,9 +1305,19 @@ function atualizarCarrinho(devePersistir = true) {
         listaCarrinho.appendChild(li);
     });
 
-    qtdItens.textContent = totalItens;
+    qtdItens.textContent = resumo.totalItens;
 
-    const totalFormatado = "R$ " + totalPreco.toFixed(2).replace(".", ",");
+    if (carrinhoDetalhes) {
+        carrinhoDetalhes.innerHTML = resumo.linhas.map(({ item, precoUnitario, quantidade, subtotal }) => `
+            <div class="carrinho-resumo__item">
+                <span class="carrinho-resumo__nome">${escapeHtml(item.nome)}</span>
+                <span class="carrinho-resumo__calculo">${quantidade} × ${formatarPreco(precoUnitario)}</span>
+                <strong>${formatarPreco(subtotal)}</strong>
+            </div>
+        `).join("");
+    }
+
+    const totalFormatado = formatarPreco(resumo.subtotal);
     subtotalPreco.textContent = totalFormatado;
     totalPrecoElement.textContent = totalFormatado;
 
@@ -1378,7 +1434,9 @@ async function abrirCarrinho() {
 
     atualizarCarrinho(false);
     pausarPopupCarrinho();
+    focoAntesCarrinho = document.activeElement;
     carrinhoLateral.classList.add("ativo");
+    carrinhoLateral.setAttribute("aria-hidden", "false");
     overlayCarrinho.classList.add("ativo");
     document.body.classList.add("sem-rolagem");
 }
@@ -1389,11 +1447,17 @@ function fecharPainelCarrinho() {
     }
 
     carrinhoLateral.classList.remove("ativo");
+    carrinhoLateral.setAttribute("aria-hidden", "true");
     overlayCarrinho.classList.remove("ativo");
     retomarPopupCarrinho();
 
     if (overlayPesquisa.classList.contains("oculto") && !menuMobileAberto()) {
         document.body.classList.remove("sem-rolagem");
+    }
+
+    if (focoAntesCarrinho instanceof HTMLElement) {
+        focoAntesCarrinho.focus();
+        focoAntesCarrinho = null;
     }
 }
 
