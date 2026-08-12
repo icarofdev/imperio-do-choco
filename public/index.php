@@ -34,7 +34,7 @@ $destinoConta = $usuarioAutenticado
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?v=20260811-3">
     <link rel="stylesheet" href="../assets/css/premium-home.css?v=20260811-3">
-    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-4">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-5">
     <script>
         window.APP_CSRF_TOKEN = <?php echo json_encode(obterTokenCsrf(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
         window.APP_AUTH = {

@@ -406,6 +406,36 @@
     color: #64120C;
 }
 
+.registration-card--login {
+    min-height: 640px;
+}
+
+.registration-card--login .registration-form-panel {
+    padding-block: 64px 52px;
+}
+
+.login-account-form__meta {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -4px;
+}
+
+.login-account-form__assist {
+    color: #AB7843;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-underline-offset: 4px;
+}
+
+.login-account-form__assist:hover {
+    color: #64120C;
+}
+
+.registration-card--login .registration-form__legal {
+    max-width: 48ch;
+    margin-inline: auto;
+}
+
 html[data-theme="dark"] .registration-card,
 html[data-theme="dark"] .registration-form-panel {
     background: var(--theme-surface, #552919);
@@ -420,6 +450,14 @@ html[data-theme="dark"] .registration-close:hover {
 }
 
 html[data-theme="dark"] .registration-login-link a:hover {
+    color: #F2EDE7;
+}
+
+html[data-theme="dark"] .login-account-form__assist {
+    color: #D9B48F;
+}
+
+html[data-theme="dark"] .login-account-form__assist:hover {
     color: #F2EDE7;
 }
 
@@ -509,6 +547,10 @@ html[data-theme="dark"] .registration-login-link a:hover {
 
     .registration-form-panel {
         padding: 48px 24px 40px;
+    }
+
+    .registration-card--login .registration-form-panel {
+        padding: 44px 24px 40px;
     }
 
     .registration-close {

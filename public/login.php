@@ -85,29 +85,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/login.css?v=20260527-1">
-    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-4">
-    <link rel="stylesheet" href="../assets/css/registration.css?v=20260731-1">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-5">
+    <link rel="stylesheet" href="../assets/css/registration.css?v=20260811-2">
     <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
-<body class="login-body login-body--customer" data-theme-toggle-floating>
-    <main class="login-modal-shell">
-        <section class="login-modal" aria-labelledby="login-title">
-            <a class="login-modal__close" href="index.php" aria-label="Fechar e voltar para a vitrine">
+<body class="login-body registration-page" data-theme-toggle-floating>
+    <main class="registration-shell">
+        <section class="registration-card registration-card--login" aria-labelledby="login-title">
+            <a class="registration-close" href="index.php" aria-label="Fechar e voltar para a loja">
                 <span aria-hidden="true">&times;</span>
             </a>
 
-            <div class="login-modal__intro">
-                <a class="login-modal__brand" href="index.php" aria-label="Voltar para a vitrine">
-                    <img src="../assets/images/logos/velle-dulcis.png" alt="Velle Dulcis" width="459" height="543">
-                </a>
-                <h1 id="login-title">Login</h1>
-                <p>
-                    Entre para acompanhar pedidos e acessar sua conta. Se o perfil for administrativo, o painel abre automaticamente apos a autenticacao.
-                </p>
-            </div>
+            <aside class="registration-story" aria-label="Universo Velle Dulcis">
+                <img
+                    class="registration-story__image"
+                    src="../assets/images/about/chocolate-drip-closeup.webp"
+                    alt="Chocolate Velle Dulcis em detalhe"
+                    width="1024"
+                    height="1024"
+                >
+                <div class="registration-story__veil" aria-hidden="true"></div>
+                <div class="registration-story__content">
+                    <a class="registration-brand" href="index.php" aria-label="Velle Dulcis — voltar para a loja">
+                        <img src="../assets/images/logos/velle-dulcis.png" alt="Velle Dulcis" width="459" height="543">
+                    </a>
+                    <div class="registration-story__copy">
+                        <p class="registration-eyebrow">Sua conta</p>
+                        <h1 id="login-title">Bem-vindo de volta.</h1>
+                        <p>Entre para acompanhar pedidos e acessar sua conta.</p>
+                    </div>
+                    <p class="registration-story__signature">Chocolate feito para permanecer na memória.</p>
+                </div>
+            </aside>
 
-            <form method="post" class="login-form login-form--customer" novalidate>
-                <input type="hidden" name="csrf_token" value="<?php echo tokenCsrfHtml(); ?>">
+            <div class="registration-form-panel">
+                <header class="registration-header">
+                    <p class="registration-eyebrow">Velle Dulcis</p>
+                    <h2>Entrar</h2>
+                    <p>Use seu e-mail e sua senha para continuar.</p>
+                </header>
 
                 <?php if ($sucesso !== ""): ?>
                     <div class="auth-alert auth-alert--success" role="status" aria-live="polite">
@@ -116,50 +132,53 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
                 <?php endif; ?>
 
-                <label class="login-form__field login-form__field--customer">
-                    <span>Email*</span>
-                    <input
-                        type="email"
-                        name="email"
-                        autocomplete="email"
-                        placeholder="Email"
-                        value="<?php echo htmlspecialchars($emailPreenchido, ENT_QUOTES, "UTF-8"); ?>"
-                        required
-                    >
-                </label>
-
-                <label class="login-form__field login-form__field--customer">
-                    <span>Senha*</span>
-                    <input
-                        type="password"
-                        name="senha"
-                        autocomplete="current-password"
-                        placeholder="Senha"
-                        required
-                    >
-                </label>
-
-                <div class="login-form__meta">
-                    <a class="login-form__assist" href="esqueci-senha.php">Esqueceu sua senha?</a>
-                </div>
-
-                <button type="submit">Entrar</button>
-
                 <?php if ($erro !== "" || !$bancoDisponivel): ?>
-                    <p id="login-mensagem" class="login-form__message" aria-live="polite">
-                        <?php echo htmlspecialchars($erro !== "" ? $erro : $mensagemBancoIndisponivel, ENT_QUOTES, "UTF-8"); ?>
-                    </p>
+                    <div class="auth-alert" role="alert" aria-live="polite">
+                        <span class="auth-alert__icon" aria-hidden="true">!</span>
+                        <p><?php echo htmlspecialchars($erro !== "" ? $erro : $mensagemBancoIndisponivel, ENT_QUOTES, "UTF-8"); ?></p>
+                    </div>
                 <?php endif; ?>
 
-                <a class="login-form__create" href="cadastro.php">
-                    Criar conta
-                    <span aria-hidden="true">&rarr;</span>
-                </a>
-            </form>
+                <form method="post" class="registration-form login-account-form" novalidate>
+                    <input type="hidden" name="csrf_token" value="<?php echo tokenCsrfHtml(); ?>">
 
-            <p class="login-modal__note">
-                Clientes seguem para a propria area e administradores entram no painel ao usar as credenciais corretas.
-            </p>
+                    <label class="registration-field">
+                        <span>E-mail</span>
+                        <input
+                            type="email"
+                            name="email"
+                            autocomplete="email"
+                            inputmode="email"
+                            placeholder="voce@exemplo.com"
+                            value="<?php echo htmlspecialchars($emailPreenchido, ENT_QUOTES, "UTF-8"); ?>"
+                            required
+                        >
+                    </label>
+
+                    <label class="registration-field">
+                        <span>Senha</span>
+                        <input
+                            type="password"
+                            name="senha"
+                            autocomplete="current-password"
+                            placeholder="Digite sua senha"
+                            required
+                        >
+                    </label>
+
+                    <div class="login-account-form__meta">
+                        <a class="login-account-form__assist" href="esqueci-senha.php">Esqueceu sua senha?</a>
+                    </div>
+
+                    <button class="registration-submit" type="submit">
+                        <span class="registration-submit__label">Entrar</span>
+                    </button>
+
+                    <p class="registration-form__legal">Clientes seguem para a própria área e administradores entram no painel ao usar as credenciais corretas.</p>
+                </form>
+
+                <p class="registration-login-link">Ainda não tem uma conta? <a href="cadastro.php">Criar conta</a></p>
+            </div>
         </section>
     </main>
 </body>

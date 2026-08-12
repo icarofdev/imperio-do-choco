@@ -576,6 +576,18 @@ html[data-theme="dark"] .pagina-principal :where(.vitrine-intro p:not(.vitrine-i
     color: var(--color-text-secondary);
 }
 
+html[data-theme="dark"] .pagina-principal .card__cta,
+html[data-theme="dark"] .pagina-principal .manifesto a {
+    color: var(--theme-on-brand);
+}
+
+html[data-theme="dark"] .pagina-principal .card__cta:hover,
+html[data-theme="dark"] .pagina-principal .card__cta:focus-visible {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--primary) 82%, var(--color-accent));
+    color: var(--theme-on-brand);
+}
+
 html[data-theme="dark"] .pagina-principal .card__descricao {
     color: var(--color-accent-hover);
 }
