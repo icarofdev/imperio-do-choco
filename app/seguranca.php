@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-final class BancoSessaoHandler implements SessionHandlerInterface
+final class BancoSessaoHandler implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
 {
     public function __construct(
         private PDO $pdo,
@@ -34,6 +34,24 @@ final class BancoSessaoHandler implements SessionHandlerInterface
             return is_string($dados) ? $dados : "";
         } catch (PDOException $exception) {
             error_log("[Velle Dulcis][session] Falha ao ler sessao (codigo=" . $exception->getCode() . ").");
+            return false;
+        }
+    }
+
+    public function validateId(string $id): bool
+    {
+        try {
+            $stmt = $this->pdo->prepare(
+                "SELECT 1 FROM sessoes WHERE id = :id AND expira_em >= :agora LIMIT 1"
+            );
+            $stmt->execute([
+                "id" => $id,
+                "agora" => time(),
+            ]);
+
+            return (bool) $stmt->fetchColumn();
+        } catch (PDOException $exception) {
+            error_log("[Velle Dulcis][session] Falha ao validar sessao (codigo=" . $exception->getCode() . ").");
             return false;
         }
     }
@@ -75,6 +93,29 @@ final class BancoSessaoHandler implements SessionHandlerInterface
         }
     }
 
+    public function updateTimestamp(string $id, string $data): bool
+    {
+        try {
+            $stmt = $this->pdo->prepare(
+                "UPDATE sessoes
+                 SET expira_em = :expira_em,
+                     ip = :ip,
+                     user_agent = :user_agent
+                 WHERE id = :id"
+            );
+
+            return $stmt->execute([
+                "id" => $id,
+                "ip" => substr((string) ($_SERVER["REMOTE_ADDR"] ?? ""), 0, 45) ?: null,
+                "user_agent" => substr((string) ($_SERVER["HTTP_USER_AGENT"] ?? ""), 0, 255) ?: null,
+                "expira_em" => time() + $this->tempoDeVida,
+            ]);
+        } catch (PDOException $exception) {
+            error_log("[Velle Dulcis][session] Falha ao renovar sessao (codigo=" . $exception->getCode() . ").");
+            return false;
+        }
+    }
+
     public function gc(int $max_lifetime): int|false
     {
         try {
@@ -94,16 +135,33 @@ function iniciarSessaoSegura(): void
         return;
     }
 
-    $httpsAtivo = requisicaoHttpsAtiva();
+    if (headers_sent($arquivo, $linha)) {
+        throw new RuntimeException("A sessao deve ser iniciada antes da saida em {$arquivo}:{$linha}.");
+    }
+
+    $httpsAtivo = cookieSessaoDeveSerSeguro();
     $tempoDeVida = max(900, (int) obterVariavelAmbienteSessao("SESSION_LIFETIME", "7200"));
     $driver = strtolower(obterVariavelAmbienteSessao(
         "SESSION_DRIVER",
         ambienteVercel() ? "database" : "files"
     ));
 
+    if (ambienteVercel() && $driver === "files") {
+        $driver = "database";
+    }
+
     ini_set("session.use_strict_mode", "1");
     ini_set("session.use_only_cookies", "1");
+    ini_set("session.use_trans_sid", "0");
     ini_set("session.gc_maxlifetime", (string) $tempoDeVida);
+
+    $nomeSessao = obterVariavelAmbienteSessao("SESSION_COOKIE_NAME", "velle_dulcis_session");
+
+    if (preg_match('/^[A-Za-z][A-Za-z0-9_]{0,63}$/', $nomeSessao) !== 1) {
+        throw new RuntimeException("SESSION_COOKIE_NAME possui um formato invalido.");
+    }
+
+    session_name($nomeSessao);
 
     if ($driver === "database") {
         configurarSessoesNoBanco($tempoDeVida);
@@ -115,11 +173,11 @@ function iniciarSessaoSegura(): void
 
     session_set_cookie_params([
         "lifetime" => 0,
-        "path" => "/",
-        "domain" => "",
+        "path" => obterCaminhoCookieSessao(),
+        "domain" => obterDominioCookieSessao(),
         "secure" => $httpsAtivo,
         "httponly" => true,
-        "samesite" => "Lax",
+        "samesite" => obterSameSiteCookieSessao($httpsAtivo),
     ]);
 
     if (!session_start()) {
@@ -138,7 +196,75 @@ function requisicaoHttpsAtiva(): bool
     $https = strtolower((string) ($_SERVER["HTTPS"] ?? ""));
     $protocoloEncaminhado = strtolower(trim(explode(",", (string) ($_SERVER["HTTP_X_FORWARDED_PROTO"] ?? ""))[0]));
 
-    return ($https !== "" && $https !== "off") || $protocoloEncaminhado === "https";
+    if ($protocoloEncaminhado === "") {
+        $forwarded = (string) ($_SERVER["HTTP_FORWARDED"] ?? "");
+
+        if (preg_match('/(?:^|;)\s*proto=(?:"?)(https?)(?:"?)(?:;|$)/i', $forwarded, $resultado) === 1) {
+            $protocoloEncaminhado = strtolower($resultado[1]);
+        }
+    }
+
+    return ($https !== "" && $https !== "off")
+        || (string) ($_SERVER["SERVER_PORT"] ?? "") === "443"
+        || $protocoloEncaminhado === "https";
+}
+
+function cookieSessaoDeveSerSeguro(): bool
+{
+    $configurado = strtolower(trim(obterVariavelAmbienteSessao("SESSION_COOKIE_SECURE", "auto")));
+
+    if (in_array($configurado, ["1", "true", "yes", "on"], true)) {
+        return true;
+    }
+
+    if (in_array($configurado, ["0", "false", "no", "off"], true)) {
+        return false;
+    }
+
+    if ($configurado !== "auto") {
+        throw new RuntimeException("SESSION_COOKIE_SECURE deve ser 'auto', true ou false.");
+    }
+
+    $appUrl = obterVariavelAmbienteSessao("APP_URL", "");
+
+    return requisicaoHttpsAtiva() || strtolower((string) parse_url($appUrl, PHP_URL_SCHEME)) === "https";
+}
+
+function obterCaminhoCookieSessao(): string
+{
+    $caminho = trim(obterVariavelAmbienteSessao("SESSION_COOKIE_PATH", "/"));
+
+    if ($caminho === "" || !str_starts_with($caminho, "/") || preg_match('/[\r\n;]/', $caminho) === 1) {
+        throw new RuntimeException("SESSION_COOKIE_PATH possui um formato invalido.");
+    }
+
+    return $caminho;
+}
+
+function obterDominioCookieSessao(): string
+{
+    $dominio = strtolower(trim(obterVariavelAmbienteSessao("SESSION_COOKIE_DOMAIN", "")));
+
+    if ($dominio !== "" && preg_match('/^\.?[a-z0-9.-]+$/', $dominio) !== 1) {
+        throw new RuntimeException("SESSION_COOKIE_DOMAIN possui um formato invalido.");
+    }
+
+    return $dominio;
+}
+
+function obterSameSiteCookieSessao(bool $cookieSeguro): string
+{
+    $sameSite = ucfirst(strtolower(trim(obterVariavelAmbienteSessao("SESSION_COOKIE_SAMESITE", "Lax"))));
+
+    if (!in_array($sameSite, ["Lax", "Strict", "None"], true)) {
+        throw new RuntimeException("SESSION_COOKIE_SAMESITE deve ser Lax, Strict ou None.");
+    }
+
+    if ($sameSite === "None" && !$cookieSeguro) {
+        throw new RuntimeException("SameSite=None exige SESSION_COOKIE_SECURE=true.");
+    }
+
+    return $sameSite;
 }
 
 function obterVariavelAmbienteSessao(string $nome, string $padrao): string
@@ -150,9 +276,7 @@ function obterVariavelAmbienteSessao(string $nome, string $padrao): string
 
 function configurarSessoesEmArquivos(): void
 {
-    $diretorioBase = ambienteVercel()
-        ? sys_get_temp_dir()
-        : dirname(__DIR__) . DIRECTORY_SEPARATOR . ".runtime";
+    $diretorioBase = dirname(__DIR__) . DIRECTORY_SEPARATOR . ".runtime";
     $diretorioSessoes = rtrim($diretorioBase, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . "sessions";
 
     if (!is_dir($diretorioSessoes) && !mkdir($diretorioSessoes, 0770, true) && !is_dir($diretorioSessoes)) {
@@ -182,7 +306,12 @@ function configurarSessoesNoBanco(int $tempoDeVida): void
 function regenerarSessaoAutenticada(): void
 {
     iniciarSessaoSegura();
-    session_regenerate_id(true);
+
+    if (!session_regenerate_id(true)) {
+        throw new RuntimeException("Nao foi possivel regenerar a sessao autenticada.");
+    }
+
+    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
 
 function obterTokenCsrf(): string

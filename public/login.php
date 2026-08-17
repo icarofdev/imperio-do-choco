@@ -9,16 +9,31 @@ iniciarSessaoSegura();
 
 function redirecionarUsuarioPorPapel(string $papel, ?string $nomeUsuario = null): void
 {
-    if ($papel === "admin") {
-        header("Location: admin.php");
-        exit;
-    }
+    $destino = $papel === "admin" ? "admin.php" : "conta.php";
 
-    if ($nomeUsuario !== null && $nomeUsuario !== "") {
+    if ($papel !== "admin" && $nomeUsuario !== null && $nomeUsuario !== "") {
         $_SESSION["flash_boas_vindas"] = "Bem-vindo de volta, {$nomeUsuario}.";
     }
 
-    header("Location: index.php");
+    if (!session_write_close()) {
+        throw new RuntimeException("Nao foi possivel persistir a sessao autenticada.");
+    }
+
+    $status = ($_SERVER["REQUEST_METHOD"] ?? "GET") === "POST" ? 303 : 302;
+    header("Location: {$destino}", true, $status);
+    exit;
+}
+
+function redirecionarAposFalhaLogin(string $mensagem, string $email = ""): never
+{
+    $_SESSION["flash_login_erro"] = $mensagem;
+    $_SESSION["flash_login_email"] = $email;
+
+    if (!session_write_close()) {
+        throw new RuntimeException("Nao foi possivel persistir o resultado do login.");
+    }
+
+    header("Location: login.php", true, 303);
     exit;
 }
 
@@ -26,12 +41,16 @@ if (isset($_SESSION["usuario_id"])) {
     redirecionarUsuarioPorPapel((string) ($_SESSION["usuario_papel"] ?? "cliente"));
 }
 
-$erro = "";
+$erro = isset($_SESSION["flash_login_erro"]) && is_string($_SESSION["flash_login_erro"])
+    ? $_SESSION["flash_login_erro"]
+    : "";
 $sucesso = isset($_SESSION["flash_cadastro_sucesso"]) && is_string($_SESSION["flash_cadastro_sucesso"])
     ? $_SESSION["flash_cadastro_sucesso"]
     : "";
-unset($_SESSION["flash_cadastro_sucesso"]);
-$emailPreenchido = "";
+$emailPreenchido = isset($_SESSION["flash_login_email"]) && is_string($_SESSION["flash_login_email"])
+    ? $_SESSION["flash_login_email"]
+    : "";
+unset($_SESSION["flash_cadastro_sucesso"], $_SESSION["flash_login_erro"], $_SESSION["flash_login_email"]);
 $conexaoDisponivel = bancoDeDadosDisponivel($pdo);
 $schemaUsuariosDisponivel = $conexaoDisponivel && $pdo instanceof PDO && schemaUsuariosDisponivel($pdo);
 $bancoDisponivel = $conexaoDisponivel && $schemaUsuariosDisponivel;
@@ -44,11 +63,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $senha = (string) ($_POST["senha"] ?? "");
 
     if (!tokenCsrfValido(obterTokenCsrfRequisicao())) {
-        $erro = "Sessao expirada. Recarregue a pagina e tente novamente.";
+        redirecionarAposFalhaLogin("Sessao expirada. Recarregue a pagina e tente novamente.", $emailPreenchido);
     } elseif ($emailPreenchido === "" || $senha === "") {
-        $erro = "Preencha email e senha para continuar.";
+        redirecionarAposFalhaLogin("Preencha email e senha para continuar.", $emailPreenchido);
     } elseif (!$bancoDisponivel) {
-        $erro = $mensagemBancoIndisponivel;
+        redirecionarAposFalhaLogin($mensagemBancoIndisponivel, $emailPreenchido);
     } else {
         try {
             $sql = "SELECT id, nome, email, senha_hash, papel FROM usuarios WHERE email = :email LIMIT 1";
@@ -66,13 +85,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 redirecionarUsuarioPorPapel($_SESSION["usuario_papel"], $_SESSION["usuario_nome"]);
             }
 
-            $erro = "Email ou senha invalidos.";
+            redirecionarAposFalhaLogin("Email ou senha invalidos.", $emailPreenchido);
         } catch (PDOException $exception) {
             error_log("[Velle Dulcis][login] Falha ao consultar usuario: " . $exception->getMessage());
-            $erro = "Nao foi possivel validar o login agora. Tente novamente em instantes.";
+            redirecionarAposFalhaLogin(
+                "Nao foi possivel validar o login agora. Tente novamente em instantes.",
+                $emailPreenchido
+            );
         }
     }
 }
+
+$csrfToken = obterTokenCsrf();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -86,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/login.css?v=20260527-1">
     <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-5">
-    <link rel="stylesheet" href="../assets/css/registration.css?v=20260811-2">
+    <link rel="stylesheet" href="../assets/css/registration.css?v=20260817-1">
     <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
 <body class="login-body registration-page" data-theme-toggle-floating>
@@ -139,8 +163,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
                 <?php endif; ?>
 
-                <form method="post" class="registration-form login-account-form" novalidate>
-                    <input type="hidden" name="csrf_token" value="<?php echo tokenCsrfHtml(); ?>">
+                <form method="post" action="login.php" class="registration-form login-account-form" novalidate>
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, "UTF-8"); ?>">
 
                     <label class="registration-field">
                         <span>E-mail</span>

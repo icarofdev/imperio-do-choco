@@ -15,19 +15,18 @@
 6. Rode as migracoes:
    `C:\xampp\php\php.exe database\migrate.php`
 
-7. Se quiser criar o administrador inicial, execute o arquivo `database/criar-admin.sql`.
+7. Para criar o administrador inicial, defina `ADMIN_NAME`, `ADMIN_EMAIL` e `ADMIN_PASSWORD` no `.env` e execute:
+   `C:\xampp\php\php.exe database\criar-admin.php`
 
 8. Teste a conexao:
    `C:\xampp\php\php.exe app\teste-banco.php`
 
 9. Login administrativo:
-   Email: `admin@imperiodochocolate.com`
-   Senha: use a senha definida no hash de `database/criar-admin.sql` e troque apos o primeiro acesso.
+   Use o email e a senha definidos no ambiente. A senha nao e armazenada no repositorio e chega ao banco somente como hash seguro.
 
 10. Fluxo principal:
    `http://localhost/imperio-do-choco/public/login.php`
-   depois
-   `http://localhost/imperio-do-choco/public/index.php`
+   Clientes seguem para `conta.php`; administradores seguem para `admin.php`.
 
 ----------OBSERVACOES IMPORTANTES----------
 

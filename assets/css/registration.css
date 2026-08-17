@@ -431,6 +431,42 @@
     color: #64120C;
 }
 
+/* Mantem o preenchimento automatico integrado ao marrom da identidade visual. */
+.login-account-form .registration-field input:-webkit-autofill,
+.login-account-form .registration-field input:-webkit-autofill:hover,
+.login-account-form .registration-field input:-webkit-autofill:active {
+    border-color: rgba(217, 180, 143, 0.5);
+    -webkit-box-shadow: 0 0 0 1000px #351A17 inset;
+    box-shadow: 0 0 0 1000px #351A17 inset;
+    -webkit-text-fill-color: #F2EDE7;
+    caret-color: #F2EDE7;
+    color-scheme: dark;
+    transition: background-color 9999s ease-out 0s;
+}
+
+.login-account-form .registration-field input:-webkit-autofill:focus {
+    border-color: #AB7843;
+    -webkit-box-shadow: 0 0 0 1000px #351A17 inset, 0 0 0 4px rgba(171, 120, 67, 0.2);
+    box-shadow: 0 0 0 1000px #351A17 inset, 0 0 0 4px rgba(171, 120, 67, 0.2);
+    -webkit-text-fill-color: #F2EDE7;
+}
+
+.login-account-form .registration-field input:-moz-autofill {
+    border-color: rgba(217, 180, 143, 0.5);
+    box-shadow: 0 0 0 1000px #351A17 inset;
+    color: #F2EDE7;
+    caret-color: #F2EDE7;
+    color-scheme: dark;
+}
+
+.login-account-form .registration-field input:autofill {
+    border-color: rgba(217, 180, 143, 0.5);
+    box-shadow: 0 0 0 1000px #351A17 inset;
+    color: #F2EDE7;
+    caret-color: #F2EDE7;
+    color-scheme: dark;
+}
+
 .registration-card--login .registration-form__legal {
     max-width: 48ch;
     margin-inline: auto;
