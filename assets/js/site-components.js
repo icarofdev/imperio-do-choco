@@ -108,7 +108,7 @@
                     <span id="link-conta-texto" data-hide-when-authenticated="true"${auth.authenticated ? " hidden" : ""}>${escapeHtml(accountLabel(auth))}</span>
                 </a>
                 <a class="acao-topo acao-topo--cadastro" href="cadastro.php"${auth.authenticated ? " hidden" : ""}>Criar conta</a>
-                <button id="btn-carrinho" class="acao-topo acao-topo--carrinho" type="button" aria-label="Carrinho">
+                <button id="btn-carrinho" class="acao-topo acao-topo--carrinho" type="button" aria-label="Carrinho" aria-controls="carrinho-lateral" aria-expanded="false">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8V7a4 4 0 118 0v1"></path><path d="M6 8h12l-1 11H7L6 8z"></path></svg>
                     <span id="qtd-itens">0</span>
                 </button>

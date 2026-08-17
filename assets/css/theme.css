@@ -982,14 +982,19 @@ html[data-theme="dark"] .pagina-principal .resultado-pesquisa__info span {
 
 #carrinho-lateral,
 html[data-theme="dark"] .pagina-principal #carrinho-lateral {
-    width: min(460px, 100vw);
+    inset: 0 0 auto auto;
+    width: min(460px, calc(100% - 16px));
+    max-width: 100%;
     background: var(--color-surface);
     color: var(--color-text-primary);
     box-shadow: none;
+    transform: translate3d(100%, 0, 0);
+    transform-origin: right center;
     transition: transform 240ms ease, opacity 180ms ease;
 }
 
 #carrinho-lateral.ativo {
+    transform: translate3d(0, 0, 0);
     box-shadow: -18px 0 48px color-mix(in srgb, var(--color-background) 44%, transparent);
 }
 

@@ -32,9 +32,9 @@ $destinoConta = $usuarioAutenticado
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css?v=20260811-3">
-    <link rel="stylesheet" href="../assets/css/premium-home.css?v=20260811-3">
-    <link rel="stylesheet" href="../assets/css/theme.css?v=20260811-5">
+    <link rel="stylesheet" href="../assets/css/style.css?v=20260817-1">
+    <link rel="stylesheet" href="../assets/css/premium-home.css?v=20260817-1">
+    <link rel="stylesheet" href="../assets/css/theme.css?v=20260817-1">
     <script>
         window.APP_CSRF_TOKEN = <?php echo json_encode(obterTokenCsrf(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
         window.APP_AUTH = {
@@ -45,7 +45,7 @@ $destinoConta = $usuarioAutenticado
             mensagemBoasVindas: <?php echo json_encode($mensagemBoasVindas, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
         };
     </script>
-    <script src="../assets/js/site-components.js?v=20260811-3"></script>
+    <script src="../assets/js/site-components.js?v=20260817-1"></script>
     <script src="../assets/js/theme.js?v=20260731-3" defer></script>
 </head>
 
@@ -195,8 +195,8 @@ $destinoConta = $usuarioAutenticado
 
     <script src="../assets/js/products-data.js?v=20260811-2"></script>
     <script src="../assets/js/product-card.js?v=20260811-3"></script>
-    <script src="../assets/js/script.js?v=20260811-3"></script>
-    <script src="../assets/js/carousel.js?v=20260811-2"></script>
+    <script src="../assets/js/script.js?v=20260817-1"></script>
+    <script src="../assets/js/carousel.js?v=20260817-1"></script>
     <script src="../assets/js/premium-home.js?v=20260811-3"></script>
 
 </body>

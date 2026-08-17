@@ -541,6 +541,12 @@
     display: block;
     overflow: visible;
     border-radius: 0;
+    touch-action: pan-y pinch-zoom;
+}
+
+.pagina-principal .slider-3d.is-dragging {
+    cursor: grabbing;
+    user-select: none;
 }
 
 .pagina-principal .slider-container {

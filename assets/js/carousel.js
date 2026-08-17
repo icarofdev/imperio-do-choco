@@ -21,7 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let autoplayTimer = null;
     let resumeTimer = null;
     let pointerStartX = null;
+    let pointerStartY = null;
     let pointerId = null;
+    let pointerAxis = null;
     let hovered = false;
     let focused = false;
     let interacting = false;
@@ -123,9 +125,30 @@ document.addEventListener("DOMContentLoaded", () => {
         interacting = true;
         pointerId = event.pointerId;
         pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+        pointerAxis = null;
         stopAutoplay();
         window.clearTimeout(resumeTimer);
-        carousel.setPointerCapture?.(event.pointerId);
+    });
+
+    carousel.addEventListener("pointermove", (event) => {
+        if (pointerId !== event.pointerId || pointerStartX === null || pointerStartY === null || pointerAxis !== null) {
+            return;
+        }
+
+        const distanceX = event.clientX - pointerStartX;
+        const distanceY = event.clientY - pointerStartY;
+
+        if (Math.hypot(distanceX, distanceY) < 8) {
+            return;
+        }
+
+        pointerAxis = Math.abs(distanceX) > Math.abs(distanceY) ? "x" : "y";
+
+        if (pointerAxis === "x") {
+            carousel.classList.add("is-dragging");
+            carousel.setPointerCapture?.(event.pointerId);
+        }
     });
 
     carousel.addEventListener("pointerup", (event) => {
@@ -137,11 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
         interacting = false;
         pointerId = null;
         pointerStartX = null;
+        pointerStartY = null;
 
-        if (Math.abs(distance) >= SWIPE_THRESHOLD) {
+        if (pointerAxis === "x" && Math.abs(distance) >= SWIPE_THRESHOLD) {
             goTo(activeIndex + (distance < 0 ? 1 : -1));
         }
 
+        pointerAxis = null;
+        carousel.classList.remove("is-dragging");
         scheduleResume();
     });
 
@@ -149,6 +175,9 @@ document.addEventListener("DOMContentLoaded", () => {
         interacting = false;
         pointerId = null;
         pointerStartX = null;
+        pointerStartY = null;
+        pointerAxis = null;
+        carousel.classList.remove("is-dragging");
         scheduleResume();
     });
 
